@@ -1,34 +1,39 @@
-[
-  {
-    "id": "globalvideo",
-    "name": "VN Global Video",
-    "description": "Global public video provider framework for Nuvio.",
-    "version": "1.0.0",
-    "author": "Vinay Tiwari",
-    "supportedTypes": [
-      "movie",
-      "tv"
-    ],
-    "filename": "providers/globalvideo.js",
-    "enabled": true,
-    "limited": false,
-    "supportsExternalPlayer": true,
-    "formats": [
-      "mp4",
-      "m3u8"
-    ],
-    "contentLanguage": [
-      "en",
-      "hi",
-      "ru",
-      "zh",
-      "ja",
-      "ko",
-      "es",
-      "fr",
-      "de",
-      "tr",
-      "pt"
-    ]
-  }
-]
+{
+  "name": "VN Nuvio Repository",
+  "version": "1.1.0",
+  "scrapers": [
+    {
+      "id": "globalvideo",
+      "name": "VN Global Video",
+      "description": "Global public video provider for Nuvio.",
+      "version": "1.3.0",
+      "author": "Vinay Tiwari",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/globalvideo.js",
+      "enabled": true,
+      "limited": false,
+      "hasSettings": false,
+      "supportsExternalPlayer": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "contentLanguage": [
+        "en",
+        "hi",
+        "ru",
+        "zh",
+        "ja",
+        "ko",
+        "es",
+        "fr",
+        "de",
+        "tr",
+        "pt"
+      ]
+    }
+  ]
+}
