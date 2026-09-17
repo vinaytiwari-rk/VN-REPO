@@ -1,12 +1,12 @@
 {
   "name": "VN Nuvio Repository",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "scrapers": [
     {
       "id": "globalvideo",
       "name": "VN Global Video",
-      "description": "Global public-video provider with resilient source adapters.",
-      "version": "1.4.0",
+      "description": "Global public-video provider with resilient regional source adapters.",
+      "version": "1.5.0",
       "author": "Vinay Tiwari",
       "supportedTypes": [
         "movie",
@@ -15,7 +15,7 @@
       "filename": "providers/globalvideo.js",
       "enabled": true,
       "limited": false,
-      "hasSettings": false,
+      "hasSettings": true,
       "supportsExternalPlayer": true,
       "formats": [
         "mp4",
