@@ -1,71 +1,212 @@
 /*
  * VN Global Video Provider
- * Repository: VN-REPO
- * Version: 1.1.0
+ * Version: 1.2.0
  *
- * Public / authorized video source framework
+ * Nuvio-compatible public/authorized video source engine.
+ *
+ * Current stage:
+ * - Safe request handling
+ * - Source isolation
+ * - Stream normalization
+ * - TMDB metadata hook
+ *
+ * Individual public platforms will be added after the core is verified.
  */
 
+var PROVIDER_ID = "globalvideo";
 var PROVIDER_NAME = "VN Global Video";
 
-function makeStream(source, title, url, quality, format) {
+function log(message, value) {
+  try {
+    if (value !== undefined) {
+      console.log("[VN Global Video] " + message, value);
+    } else {
+      console.log("[VN Global Video] " + message);
+    }
+  } catch (e) {}
+}
+
+function makeStream(source, title, url, quality, format, headers) {
   if (!url || typeof url !== "string") {
     return null;
   }
 
-  return {
+  var stream = {
     name: PROVIDER_NAME + " - " + source,
     title: title || source + " Stream",
     url: url,
     quality: quality || "Unknown",
-    format: format || "mp4",
-    provider: "globalvideo"
+    provider: PROVIDER_ID,
+    format: format || "mp4"
   };
+
+  if (headers && typeof headers === "object") {
+    stream.headers = headers;
+  }
+
+  return stream;
 }
+
+function normalizeStreams(source, items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  var result = [];
+
+  items.forEach(function (item) {
+    if (!item || typeof item !== "object") {
+      return;
+    }
+
+    var stream = makeStream(
+      source,
+      item.title,
+      item.url,
+      item.quality,
+      item.format,
+      item.headers
+    );
+
+    if (stream) {
+      result.push(stream);
+    }
+  });
+
+  return result;
+}
+
+function safeSource(sourceName, sourceFunction) {
+  try {
+    var result = sourceFunction();
+
+    if (!result || typeof result.then !== "function") {
+      return Promise.resolve([]);
+    }
+
+    return result
+      .then(function (streams) {
+        return normalizeStreams(sourceName, streams);
+      })
+      .catch(function (error) {
+        log(sourceName + " failed:", error && error.message);
+        return [];
+      });
+  } catch (error) {
+    log(sourceName + " crashed:", error && error.message);
+    return Promise.resolve([]);
+  }
+}
+
+/*
+ * Metadata layer.
+ *
+ * Nuvio supplies the TMDB ID to the provider.
+ * This layer will later resolve:
+ *
+ * TMDB ID
+ *   ↓
+ * title
+ * year
+ * original title
+ * media type
+ * season
+ * episode
+ *
+ * We keep this isolated from the actual video sources.
+ */
+
+function getMetadata(tmdbId, mediaType, season, episode) {
+  log("Metadata request:", tmdbId);
+
+  /*
+   * Metadata implementation will be connected after
+   * the core provider test.
+   */
+
+  return Promise.resolve({
+    tmdbId: String(tmdbId || ""),
+    mediaType: mediaType || "movie",
+    season: season == null ? null : season,
+    episode: episode == null ? null : episode,
+    title: null,
+    year: null
+  });
+}
+
+/*
+ * Source registry.
+ *
+ * Each source gets its own function.
+ * If one source fails, the remaining sources continue.
+ */
+
+var SOURCES = [];
+
+/*
+ * Main Nuvio entry point.
+ */
 
 function getStreams(tmdbId, mediaType, season, episode) {
 
-  console.log(
-    "[VN Global Video] Request:",
+  log(
+    "Request: " +
+      String(mediaType || "") +
+      " / TMDB " +
+      String(tmdbId || "")
+  );
+
+  return getMetadata(
     tmdbId,
     mediaType,
     season,
     episode
-  );
+  )
+    .then(function (metadata) {
 
-  /*
-   * Source engine will be added in the next stage.
-   *
-   * Every source will be isolated so that:
-   *
-   * Source A error
-   *      ↓
-   * Source B still runs
-   *      ↓
-   * Source C still runs
-   *
-   * One failed provider will NOT break the complete scraper.
-   */
+      if (!metadata || !metadata.tmdbId) {
+        return [];
+      }
 
-  var streams = [];
+      if (SOURCES.length === 0) {
+        log("No source modules enabled yet.");
+        return [];
+      }
 
-  /*
-   * Example:
-   *
-   * var stream = makeStream(
-   *   "Public Source",
-   *   "Public Video",
-   *   "https://example.com/video.m3u8",
-   *   "1080p",
-   *   "m3u8"
-   * );
-   *
-   * if (stream) {
-   *   streams.push(stream);
-   * }
-   */
+      var requests = SOURCES.map(function (source) {
+        return safeSource(
+          source.name,
+          function () {
+            return source.getStreams(metadata);
+          }
+        );
+      });
 
-  return Promise.resolve(streams);
+      return Promise.all(requests)
+        .then(function (results) {
+
+          var streams = [];
+
+          results.forEach(function (sourceStreams) {
+            if (Array.isArray(sourceStreams)) {
+              sourceStreams.forEach(function (stream) {
+                streams.push(stream);
+              });
+            }
+          });
+
+          return streams;
+        });
+    })
+    .catch(function (error) {
+
+      log(
+        "Provider error:",
+        error && error.message
+      );
+
+      return [];
+    });
 }
 
 module.exports = {
