@@ -5,44 +5,38 @@ function settings() {
   return globalThis.SCRAPER_SETTINGS || {};
 }
 
-function enc(v) {
-  return encodeURIComponent(String(v || ""));
+function clean(v) {
+  return String(v == null ? "" : v).trim();
 }
 
-function clean(v) {
-  return String(v || "").trim();
+function enc(v) {
+  return encodeURIComponent(clean(v));
 }
 
 function getJson(url) {
   return fetch(url).then(function (r) {
-    if (!r.ok) throw new Error("HTTP " + r.status);
+    if (!r.ok) {
+      throw new Error("HTTP " + r.status);
+    }
     return r.json();
   });
 }
 
-/* -------------------------------------------------------
-   TITLE NORMALIZATION
-   Altarboy / Altar Boy / Altar-Boy / Altar_Boy
-   all become comparable.
-------------------------------------------------------- */
+/* ---------- SAFE TITLE NORMALIZATION ---------- */
 
-function normalizeTitle(value) {
-  return clean(value)
+function normalizeTitle(v) {
+  return clean(v)
     .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[_\-./]+/g, " ")
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim()
-    .replace(/\s/g, "");
+    .replace(/ /g, "");
 }
 
-function words(value) {
-  return clean(value)
+function getWords(v) {
+  return clean(v)
     .toLowerCase()
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[_\-./]+/g, " ")
     .replace(/[^a-z0-9\s]/g, " ")
     .split(/\s+/)
@@ -51,34 +45,31 @@ function words(value) {
     });
 }
 
-function uniqueValues(list) {
+function uniqueText(list) {
   var seen = {};
-  var result = [];
+  var out = [];
 
-  list.forEach(function (x) {
-    x = clean(x);
+  list.forEach(function (v) {
+    v = clean(v);
+    if (!v) return;
 
-    if (!x) return;
-
-    var key = normalizeTitle(x);
+    var key = normalizeTitle(v);
 
     if (!key || seen[key]) return;
 
     seen[key] = true;
-    result.push(x);
+    out.push(v);
   });
 
-  return result;
+  return out;
 }
 
-/* -------------------------------------------------------
-   PLAYABLE URL CHECK
-------------------------------------------------------- */
+/* ---------- PLAYABLE ---------- */
 
 function playable(url) {
   if (!url) return false;
 
-  var u = url.toLowerCase();
+  var u = String(url).toLowerCase();
 
   return (
     u.indexOf(".mp4") !== -1 ||
@@ -88,18 +79,21 @@ function playable(url) {
   );
 }
 
-/* -------------------------------------------------------
-   STREAM OBJECT
-------------------------------------------------------- */
+/* ---------- STREAM ---------- */
 
-function makeStream(url, title, size, source, label) {
-  var lower = url.toLowerCase();
+function makeStream(
+  url,
+  title,
+  size,
+  quality
+) {
+  var lower = String(url).toLowerCase();
 
   return {
     name: PROVIDER_NAME,
     title: clean(title) || "Public Video",
     url: url,
-    quality: label || "Public",
+    quality: quality || "Public",
     size: size || undefined,
     provider: PROVIDER_ID,
     format:
@@ -111,9 +105,7 @@ function makeStream(url, title, size, source, label) {
   };
 }
 
-/* -------------------------------------------------------
-   TMDB
-------------------------------------------------------- */
+/* ---------- TMDB ---------- */
 
 function resolveTMDB(
   tmdbId,
@@ -140,7 +132,7 @@ function resolveTMDB(
       "?api_key=" +
       enc(key);
 
-    var epUrl =
+    var episodeUrl =
       "https://api.themoviedb.org/3/tv/" +
       enc(tmdbId) +
       "/season/" +
@@ -152,7 +144,7 @@ function resolveTMDB(
 
     return Promise.all([
       getJson(showUrl),
-      getJson(epUrl)
+      getJson(episodeUrl)
     ]).then(function (data) {
       var show = data[0] || {};
       var ep = data[1] || {};
@@ -161,16 +153,13 @@ function resolveTMDB(
         title: clean(show.name),
         originalTitle: clean(show.original_name),
         episodeTitle: clean(ep.name),
-        overview: clean(
-          (ep.overview || "") +
-          " " +
-          (show.overview || "")
-        ),
-        year: clean(
-          (show.first_air_date || "").slice(0, 4)
-        ),
         season: season,
-        episode: episode
+        episode: episode,
+        year: clean(
+          String(
+            show.first_air_date || ""
+          ).substring(0, 4)
+        )
       };
     });
   }
@@ -190,41 +179,41 @@ function resolveTMDB(
 
   return getJson(url).then(function (data) {
     return {
-      title: clean(data.title || data.name),
+      title: clean(
+        data.title || data.name
+      ),
       originalTitle: clean(
         data.original_title ||
         data.original_name
       ),
       episodeTitle: "",
-      overview: clean(data.overview),
+      season: null,
+      episode: null,
       year: clean(
-        (
+        String(
           data.release_date ||
           data.first_air_date ||
           ""
-        ).slice(0, 4)
+        ).substring(0, 4)
       )
     };
   });
 }
 
-/* -------------------------------------------------------
-   SEARCH QUERY GENERATION
-------------------------------------------------------- */
+/* ---------- SEARCH PATTERNS ---------- */
 
 function buildSearches(meta, mediaType) {
-  var searches = [];
+  var list = [];
 
-  var title = clean(meta.title);
-  var original = clean(meta.originalTitle);
-  var episodeTitle = clean(meta.episodeTitle);
-
-  if (title) {
-    searches.push(title);
+  if (meta.title) {
+    list.push(meta.title);
   }
 
-  if (original && original !== title) {
-    searches.push(original);
+  if (
+    meta.originalTitle &&
+    meta.originalTitle !== meta.title
+  ) {
+    list.push(meta.originalTitle);
   }
 
   if (
@@ -233,100 +222,123 @@ function buildSearches(meta, mediaType) {
     meta.episode != null
   ) {
     var s =
-      String(meta.season).padStart(2, "0");
+      meta.season < 10
+        ? "0" + meta.season
+        : String(meta.season);
 
     var e =
-      String(meta.episode).padStart(2, "0");
+      meta.episode < 10
+        ? "0" + meta.episode
+        : String(meta.episode);
 
-    if (title) {
-      searches.push(
-        title + " S" + s + "E" + e
+    if (meta.title) {
+      list.push(
+        meta.title + " S" + s + "E" + e
       );
 
-      searches.push(
-        title + " S" + s + " E" + e
+      list.push(
+        meta.title + " S" + s + " E" + e
       );
 
-      searches.push(
-        title +
+      list.push(
+        meta.title +
         " Season " +
         meta.season +
         " Episode " +
         meta.episode
       );
 
-      searches.push(
-        title +
+      list.push(
+        meta.title +
         " Episode " +
         meta.episode
       );
 
-      searches.push(
-        title +
+      list.push(
+        meta.title +
         " Ep " +
         meta.episode
       );
 
-      searches.push(
-        title + " " + meta.episode
+      list.push(
+        meta.title +
+        " " +
+        meta.episode
       );
     }
 
-    if (episodeTitle) {
-      searches.push(episodeTitle);
+    if (meta.episodeTitle) {
+      list.push(meta.episodeTitle);
 
-      if (title) {
-        searches.push(
-          title + " " + episodeTitle
+      if (meta.title) {
+        list.push(
+          meta.title +
+          " " +
+          meta.episodeTitle
         );
       }
     }
 
     /*
-      Compilation/full-video possibilities.
+      Full movie / compilation possibilities.
     */
 
-    if (title) {
-      searches.push(title + " complete");
-      searches.push(title + " full");
-      searches.push(title + " compilation");
-      searches.push(title + " season " + meta.season);
+    if (meta.title) {
+      list.push(
+        meta.title + " full"
+      );
+
+      list.push(
+        meta.title + " complete"
+      );
+
+      list.push(
+        meta.title + " compilation"
+      );
+
+      list.push(
+        meta.title +
+        " season " +
+        meta.season
+      );
     }
   } else {
-    if (title && meta.year) {
-      searches.push(
-        title + " " + meta.year
+    if (
+      meta.title &&
+      meta.year
+    ) {
+      list.push(
+        meta.title +
+        " " +
+        meta.year
       );
     }
 
-    if (original && meta.year) {
-      searches.push(
-        original + " " + meta.year
+    if (meta.title) {
+      list.push(
+        meta.title + " full"
       );
-    }
 
-    if (title) {
-      searches.push(title + " full");
-      searches.push(title + " complete");
+      list.push(
+        meta.title + " complete"
+      );
     }
   }
 
-  return uniqueValues(searches);
+  return uniqueText(list);
 }
 
-/* -------------------------------------------------------
-   RELEVANCE SCORING
-------------------------------------------------------- */
+/* ---------- RELEVANCE ---------- */
 
 function scoreCandidate(
-  candidateText,
+  text,
   meta,
   mediaType
 ) {
-  var candidate =
-    normalizeTitle(candidateText);
+  var c =
+    normalizeTitle(text);
 
-  if (!candidate) return 0;
+  if (!c) return 0;
 
   var score = 0;
 
@@ -334,76 +346,70 @@ function scoreCandidate(
     normalizeTitle(meta.title);
 
   var original =
-    normalizeTitle(meta.originalTitle);
+    normalizeTitle(
+      meta.originalTitle
+    );
 
   var episode =
-    normalizeTitle(meta.episodeTitle);
+    normalizeTitle(
+      meta.episodeTitle
+    );
 
   /*
-    Strong show-name match.
-    This handles:
     Altarboy
     Altar Boy
     Altar-Boy
+    become comparable.
   */
 
-  if (title) {
-    if (candidate.indexOf(title) !== -1) {
-      score += 60;
-    }
+  if (
+    title &&
+    c.indexOf(title) !== -1
+  ) {
+    score += 60;
+  }
 
-    if (title.indexOf(candidate) !== -1) {
-      score += 20;
-    }
+  if (
+    title &&
+    title.indexOf(c) !== -1
+  ) {
+    score += 20;
   }
 
   if (
     original &&
-    original !== title
+    original !== title &&
+    c.indexOf(original) !== -1
   ) {
-    if (candidate.indexOf(original) !== -1) {
-      score += 50;
-    }
+    score += 50;
   }
 
-  /*
-    Episode title.
-  */
-
-  if (episode) {
-    if (candidate.indexOf(episode) !== -1) {
-      score += 45;
-    }
+  if (
+    episode &&
+    c.indexOf(episode) !== -1
+  ) {
+    score += 45;
   }
 
-  /*
-    Word matching.
-  */
+  var important =
+    getWords(meta.title)
+      .concat(
+        getWords(
+          meta.originalTitle
+        )
+      );
 
-  var importantWords = [];
-
-  importantWords =
-    importantWords.concat(words(meta.title));
-
-  importantWords =
-    importantWords.concat(words(meta.originalTitle));
-
-  var uniqueWords =
-    uniqueValues(importantWords);
-
-  uniqueWords.forEach(function (word) {
-    if (
-      candidate.indexOf(
-        normalizeTitle(word)
-      ) !== -1
-    ) {
-      score += 8;
+  uniqueText(important).forEach(
+    function (word) {
+      if (
+        c.indexOf(
+          normalizeTitle(word)
+        ) !== -1
+      ) {
+        score += 8;
+      }
     }
-  });
-
-  /*
-    Episode indicators.
-  */
+  );
 
   if (
     mediaType === "tv" &&
@@ -419,16 +425,20 @@ function scoreCandidate(
     var patterns = [
       "s" + s + "e" + e,
       "s" +
-        String(meta.season).padStart(2, "0") +
+        (meta.season < 10
+          ? "0" + meta.season
+          : meta.season) +
         "e" +
-        String(meta.episode).padStart(2, "0"),
+        (meta.episode < 10
+          ? "0" + meta.episode
+          : meta.episode),
       "episode" + e,
       "ep" + e
     ];
 
     patterns.forEach(function (p) {
       if (
-        candidate.indexOf(
+        c.indexOf(
           normalizeTitle(p)
         ) !== -1
       ) {
@@ -437,54 +447,26 @@ function scoreCandidate(
     });
   }
 
-  /*
-    Compilation/full content gets some
-    positive score, but not enough to
-    outrank a proper episode match.
-  */
-
-  var compilationWords = [
-    "complete",
-    "full",
-    "compilation",
-    "allepisodes",
-    "season"
-  ];
-
-  compilationWords.forEach(function (word) {
-    if (
-      candidate.indexOf(
-        normalizeTitle(word)
-      ) !== -1
-    ) {
-      score += 5;
-    }
-  });
-
   return score;
 }
 
-/* -------------------------------------------------------
-   INTERNET ARCHIVE
-------------------------------------------------------- */
+/* ---------- INTERNET ARCHIVE ---------- */
 
 function searchArchive(
-  searchTitle,
+  query,
   meta,
   mediaType
 ) {
-  var query =
-    'title:("' +
-    searchTitle.replace(/"/g, "") +
-    '")';
-
   var url =
     "https://archive.org/advancedsearch.php?q=" +
-    enc(query) +
+    enc(
+      'title:("' +
+      query.replace(/"/g, "") +
+      '")'
+    ) +
     "&fl[]=identifier" +
     "&fl[]=title" +
-    "&fl[]=description" +
-    "&rows=30" +
+    "&rows=20" +
     "&page=1" +
     "&output=json";
 
@@ -500,30 +482,21 @@ function searchArchive(
       return Promise.all(
         docs.map(function (doc) {
           if (!doc.identifier) {
-            return Promise.resolve([]);
+            return [];
           }
 
-          var metadataUrl =
+          return getJson(
             "https://archive.org/metadata/" +
-            enc(doc.identifier);
-
-          return getJson(metadataUrl)
-            .then(function (full) {
+            enc(doc.identifier)
+          )
+            .then(function (metaData) {
               var files =
-                full && full.files
-                  ? full.files
+                metaData &&
+                metaData.files
+                  ? metaData.files
                   : [];
 
-              var result = [];
-
-              var metadataText =
-                clean(doc.title) +
-                " " +
-                clean(doc.description) +
-                " " +
-                clean(full.title) +
-                " " +
-                clean(full.description);
+              var output = [];
 
               files.forEach(function (file) {
                 var name =
@@ -541,24 +514,17 @@ function searchArchive(
                   return;
                 }
 
-                var candidateText =
-                  metadataText +
+                var candidate =
+                  clean(doc.title) +
                   " " +
                   name;
 
                 var score =
                   scoreCandidate(
-                    candidateText,
+                    candidate,
                     meta,
                     mediaType
                   );
-
-                /*
-                  Don't throw away weak candidates
-                  during the first search. Keep them
-                  so alternate title searches can
-                  still discover unusual uploads.
-                */
 
                 var direct =
                   "https://archive.org/download/" +
@@ -568,28 +534,28 @@ function searchArchive(
                   "/" +
                   name
                     .split("/")
-                    .map(encodeURIComponent)
+                    .map(
+                      encodeURIComponent
+                    )
                     .join("/");
 
-                var size =
-                  Number(file.size || 0);
-
-                result.push({
-                  item: makeStream(
+                output.push({
+                  score: score,
+                  stream: makeStream(
                     direct,
                     clean(doc.title) ||
                       name,
-                    size,
-                    "Internet Archive",
-                    score >= 80
+                    Number(
+                      file.size || 0
+                    ),
+                    score >= 70
                       ? "Public • Match"
                       : "Public"
-                  ),
-                  score: score
+                  )
                 });
               });
 
-              return result;
+              return output;
             })
             .catch(function () {
               return [];
@@ -601,41 +567,38 @@ function searchArchive(
       var all = [];
 
       groups.forEach(function (group) {
-        all = all.concat(group);
+        all =
+          all.concat(group);
       });
 
       all.sort(function (a, b) {
-        if (b.score !== a.score) {
+        if (
+          b.score !== a.score
+        ) {
           return b.score - a.score;
         }
 
-        var as =
+        return (
           Number(
-            a.item.size || 0
-          );
-
-        var bs =
+            a.stream.size || 0
+          ) -
           Number(
-            b.item.size || 0
-          );
-
-        if (!as && !bs) return 0;
-        if (!as) return 1;
-        if (!bs) return -1;
-
-        return as - bs;
+            b.stream.size || 0
+          )
+        );
       });
 
       return all;
+    })
+    .catch(function () {
+      return [];
     });
 }
 
-/* -------------------------------------------------------
-   WIKIMEDIA COMMONS
-------------------------------------------------------- */
+/* ---------- WIKIMEDIA ---------- */
 
 function searchWikimedia(
-  searchTitle,
+  query,
   meta,
   mediaType
 ) {
@@ -644,9 +607,9 @@ function searchWikimedia(
     "?action=query" +
     "&generator=search" +
     "&gsrsearch=" +
-    enc(searchTitle + " video") +
+    enc(query + " video") +
     "&gsrnamespace=6" +
-    "&gsrlimit=30" +
+    "&gsrlimit=20" +
     "&prop=imageinfo" +
     "&iiprop=url|mime|size" +
     "&format=json" +
@@ -661,78 +624,81 @@ function searchWikimedia(
           ? data.query.pages
           : {};
 
-      var result = [];
+      var output = [];
 
-      Object.keys(pages).forEach(function (id) {
-        var page = pages[id];
+      Object.keys(pages).forEach(
+        function (id) {
+          var page = pages[id];
 
-        if (
-          !page.imageinfo ||
-          !page.imageinfo[0]
-        ) {
-          return;
+          if (
+            !page.imageinfo ||
+            !page.imageinfo[0]
+          ) {
+            return;
+          }
+
+          var info =
+            page.imageinfo[0];
+
+          if (!info.url) return;
+
+          var mime =
+            clean(info.mime)
+              .toLowerCase();
+
+          if (
+            mime.indexOf("video/") !== 0 &&
+            !playable(info.url)
+          ) {
+            return;
+          }
+
+          var title =
+            clean(
+              page.title
+                ? page.title.replace(
+                    /^File:/,
+                    ""
+                  )
+                : ""
+            );
+
+          var score =
+            scoreCandidate(
+              title,
+              meta,
+              mediaType
+            );
+
+          output.push({
+            score: score,
+            stream: makeStream(
+              info.url,
+              title ||
+                "Wikimedia Video",
+              Number(
+                info.size || 0
+              ),
+              score >= 70
+                ? "Public • Match"
+                : "Public"
+            )
+          });
         }
+      );
 
-        var info =
-          page.imageinfo[0];
-
-        if (!info.url) return;
-
-        var mime =
-          clean(info.mime).toLowerCase();
-
-        if (
-          mime.indexOf("video/") !== 0 &&
-          !playable(info.url)
-        ) {
-          return;
-        }
-
-        var title =
-          clean(
-            page.title
-              ? page.title.replace(
-                  /^File:/,
-                  ""
-                )
-              : ""
-          );
-
-        var score =
-          scoreCandidate(
-            title,
-            meta,
-            mediaType
-          );
-
-        result.push({
-          item: makeStream(
-            info.url,
-            title || "Wikimedia Video",
-            Number(info.size || 0),
-            "Wikimedia Commons",
-            score >= 80
-              ? "Public • Match"
-              : "Public"
-          ),
-          score: score
-        });
-      });
-
-      result.sort(function (a, b) {
+      output.sort(function (a, b) {
         return b.score - a.score;
       });
 
-      return result;
+      return output;
     })
     .catch(function () {
       return [];
     });
 }
 
-/* -------------------------------------------------------
-   MAIN STREAM FUNCTION
-------------------------------------------------------- */
+/* ---------- MAIN ---------- */
 
 function getStreams(
   tmdbId,
@@ -753,92 +719,85 @@ function getStreams(
           mediaType
         );
 
-      /*
-        Run every search.
-      */
-
       return Promise.all(
-        searches.map(function (query) {
-          return Promise.all([
-            searchArchive(
-              query,
-              meta,
-              mediaType
-            ).catch(function () {
-              return [];
-            }),
+        searches.map(
+          function (query) {
+            return Promise.all([
+              searchArchive(
+                query,
+                meta,
+                mediaType
+              ),
 
-            searchWikimedia(
-              query,
-              meta,
-              mediaType
-            ).catch(function () {
-              return [];
-            })
-          ]);
-        })
+              searchWikimedia(
+                query,
+                meta,
+                mediaType
+              )
+            ]);
+          }
+        )
       );
     })
     .then(function (groups) {
       var all = [];
       var seen = {};
 
-      groups.forEach(function (group) {
-        group.forEach(function (source) {
-          source.forEach(function (entry) {
-            if (
-              !entry ||
-              !entry.item ||
-              !entry.item.url
-            ) {
-              return;
+      groups.forEach(
+        function (group) {
+          group.forEach(
+            function (source) {
+              source.forEach(
+                function (entry) {
+                  if (
+                    !entry ||
+                    !entry.stream ||
+                    !entry.stream.url
+                  ) {
+                    return;
+                  }
+
+                  if (
+                    seen[
+                      entry.stream.url
+                    ]
+                  ) {
+                    return;
+                  }
+
+                  seen[
+                    entry.stream.url
+                  ] = true;
+
+                  all.push(entry);
+                }
+              );
             }
-
-            if (
-              seen[entry.item.url]
-            ) {
-              return;
-            }
-
-            seen[entry.item.url] = true;
-
-            all.push(entry);
-          });
-        });
-      });
-
-      /*
-        Highest relevance first.
-      Smaller files win when relevance
-        is equal.
-      */
+          );
+        }
+      );
 
       all.sort(function (a, b) {
-        if (b.score !== a.score) {
+        if (
+          b.score !== a.score
+        ) {
           return b.score - a.score;
         }
 
-        var as =
+        return (
           Number(
-            a.item.size || 0
-          );
-
-        var bs =
+            a.stream.size || 0
+          ) -
           Number(
-            b.item.size || 0
-          );
-
-        if (!as && !bs) return 0;
-        if (!as) return 1;
-        if (!bs) return -1;
-
-        return as - bs;
+            b.stream.size || 0
+          )
+        );
       });
 
       return all
         .slice(0, 12)
-        .map(function (entry) {
-          return entry.item;
+        .map(function (x) {
+          return x.stream;
         });
     })
     .catch(function (error) {
@@ -854,9 +813,7 @@ function getStreams(
     });
 }
 
-/* -------------------------------------------------------
-   SETTINGS
-------------------------------------------------------- */
+/* ---------- SETTINGS ---------- */
 
 function onSettings() {
   return [
@@ -864,13 +821,11 @@ function onSettings() {
       type: "header",
       label: "VN Global Video"
     },
-
     {
       type: "info",
       label:
         "Public direct-video sources only."
     },
-
     {
       type: "text",
       key: "tmdbApiKey",
