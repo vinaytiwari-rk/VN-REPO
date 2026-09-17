@@ -1,345 +1,368 @@
 const PROVIDER_NAME = "VN Global Video";
 const PROVIDER_ID = "globalvideo";
 
-function S() {
+function getSettings() {
   return globalThis.SCRAPER_SETTINGS || {};
 }
 
-function C(v) {
-  return String(v == null ? "" : v).trim();
+function enc(value) {
+  return encodeURIComponent(String(value || ""));
 }
 
-function E(v) {
-  return encodeURIComponent(C(v));
+function json(url) {
+  return fetch(url)
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("HTTP " + response.status);
+      }
+      return response.json();
+    });
 }
 
-function J(url) {
-  return fetch(url).then(function (r) {
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    return r.json();
-  });
+function text(value) {
+  return String(value || "").trim();
 }
 
 function playable(url) {
   if (!url) return false;
 
-  var x = String(url).toLowerCase();
+  var u = url.toLowerCase();
 
   return (
-    x.indexOf(".m3u8") !== -1 ||
-    x.indexOf(".mp4") !== -1 ||
-    x.indexOf(".webm") !== -1 ||
-    x.indexOf(".ogv") !== -1
+    u.indexOf(".mp4") !== -1 ||
+    u.indexOf(".m3u8") !== -1 ||
+    u.indexOf(".webm") !== -1 ||
+    u.indexOf(".ogv") !== -1
   );
 }
 
-function make(url, title, quality, source) {
-  var x = String(url).toLowerCase();
-
+function makeStream(url, title, quality, source) {
   return {
     name: PROVIDER_NAME,
-    title: C(title) || source || "Public Stream",
+    title: title || source + " Public Video",
     url: url,
-    quality: quality || "Auto",
+    quality: quality || "Unknown",
     provider: PROVIDER_ID,
-    format:
-      x.indexOf(".m3u8") !== -1
-        ? "m3u8"
-        : x.indexOf(".webm") !== -1
-        ? "webm"
-        : "mp4"
+    format: url.toLowerCase().indexOf(".m3u8") !== -1
+      ? "m3u8"
+      : "mp4"
   };
 }
 
-function unique(list) {
+function unique(streams) {
   var seen = {};
-  var out = [];
+  var result = [];
 
-  list.forEach(function (x) {
-    if (!x || !x.url) return;
+  streams.forEach(function (s) {
+    if (!s || !s.url) return;
 
-    if (seen[x.url]) return;
+    if (seen[s.url]) return;
 
-    seen[x.url] = true;
-    out.push(x);
+    seen[s.url] = true;
+    result.push(s);
   });
 
-  return out;
+  return result;
 }
 
-/* ---------------- TMDB ---------------- */
 
-function tmdb(tmdbId, mediaType) {
-  var key = C(S().tmdbApiKey);
+/* =========================================================
+   TMDB
+   ========================================================= */
 
-  if (!key) {
-    return Promise.reject(
-      new Error("TMDB API key missing")
-    );
+function resolveTMDB(tmdbId, mediaType, season, episode) {
+  var settings = getSettings();
+  var apiKey = text(settings.tmdbApiKey);
+
+  if (!apiKey) {
+    return Promise.reject(new Error("TMDB API key missing"));
   }
 
-  var type =
-    mediaType === "tv"
-      ? "tv"
-      : "movie";
+  var url;
 
-  return J(
-    "https://api.themoviedb.org/3/" +
-      type +
-      "/" +
-      E(tmdbId) +
+  if (mediaType === "tv") {
+    if (season && episode) {
+      url =
+        "https://api.themoviedb.org/3/tv/" +
+        enc(tmdbId) +
+        "/season/" +
+        enc(season) +
+        "/episode/" +
+        enc(episode) +
+        "?api_key=" +
+        enc(apiKey);
+    } else {
+      url =
+        "https://api.themoviedb.org/3/tv/" +
+        enc(tmdbId) +
+        "?api_key=" +
+        enc(apiKey);
+    }
+  } else {
+    url =
+      "https://api.themoviedb.org/3/movie/" +
+      enc(tmdbId) +
       "?api_key=" +
-      E(key)
-  );
-}
-
-/* ---------------- TITLE VARIANTS ---------------- */
-
-function variants(meta, mediaType, season, episode) {
-  var a = [];
-
-  var title = C(
-    meta.title || meta.name
-  );
-
-  var original = C(
-    meta.original_title ||
-      meta.original_name
-  );
-
-  if (title) a.push(title);
-
-  if (
-    original &&
-    original.toLowerCase() !==
-      title.toLowerCase()
-  ) {
-    a.push(original);
+      enc(apiKey);
   }
 
-  if (
-    mediaType === "tv" &&
-    season != null &&
-    episode != null
-  ) {
-    if (title) {
-      a.push(
-        title +
-          " S" +
-          (season < 10
-            ? "0" + season
-            : season) +
-          "E" +
-          (episode < 10
-            ? "0" + episode
-            : episode)
-      );
-
-      a.push(
-        title +
-          " Episode " +
-          episode
-      );
-
-      a.push(
-        title +
-          " Ep " +
-          episode
-      );
-    }
-
-    if (meta.episodeTitle) {
-      a.push(C(meta.episodeTitle));
-
-      if (title) {
-        a.push(
-          title +
-            " " +
-            C(meta.episodeTitle)
-        );
-      }
-    }
-  }
-
-  return a.slice(0, 5);
+  return json(url).then(function (data) {
+    return {
+      title: text(data.title || data.name),
+      originalTitle: text(
+        data.original_title || data.original_name
+      ),
+      year: text(
+        (data.release_date || data.first_air_date || "").slice(0, 4)
+      )
+    };
+  });
 }
 
-/* ---------------- DIRECT API ADAPTERS ---------------- */
 
-/*
-  Adapter contract:
-  Each adapter MUST return direct playable
-  URLs only.
+/* =========================================================
+   INTERNET ARCHIVE
+   ========================================================= */
 
-  No webpage URL is returned.
-*/
+function searchInternetArchive(title) {
+  var query =
+    "title:(" +
+    title.replace(/"/g, "") +
+    ") AND mediatype:movies";
 
-function adapterWikimedia(query) {
-  return J(
-    "https://commons.wikimedia.org/w/api.php" +
-      "?action=query" +
-      "&generator=search" +
-      "&gsrsearch=" +
-      E(query + " video") +
-      "&gsrnamespace=6" +
-      "&gsrlimit=5" +
-      "&prop=imageinfo" +
-      "&iiprop=url|mime" +
-      "&format=json" +
-      "&origin=*"
-  )
-    .then(function (data) {
-      var pages =
-        data &&
-        data.query &&
-        data.query.pages
-          ? data.query.pages
-          : {};
-
-      var result = [];
-
-      Object.keys(pages).forEach(
-        function (id) {
-          var p = pages[id];
-
-          if (
-            !p.imageinfo ||
-            !p.imageinfo[0]
-          ) {
-            return;
-          }
-
-          var info =
-            p.imageinfo[0];
-
-          if (!info.url) return;
-
-          var mime =
-            C(info.mime).toLowerCase();
-
-          if (
-            mime.indexOf("video/") === 0 ||
-            playable(info.url)
-          ) {
-            result.push(
-              make(
-                info.url,
-                p.title
-                  ? p.title.replace(
-                      /^File:/,
-                      ""
-                    )
-                  : "Wikimedia",
-                "Public",
-                "Wikimedia"
-              )
-            );
-          }
-        }
-      );
-
-      return result;
-    })
-    .catch(function () {
-      return [];
-    });
-}
-
-/*
-  Internet Archive is intentionally NOT
-  recursively crawling metadata.
-
-  That was the main reason for the
-  previous multi-minute delay.
-*/
-
-function adapterArchive(query) {
-  return J(
+  var url =
     "https://archive.org/advancedsearch.php?q=" +
-      E(
-        'title:("' +
-          query.replace(/"/g, "") +
-          '")'
-      ) +
-      "&fl[]=identifier" +
-      "&fl[]=title" +
-      "&rows=5" +
-      "&output=json"
-  )
-    .then(function () {
-      /*
-        Search results do not guarantee a
-        direct playable URL, so don't guess.
-      */
-      return [];
-    })
-    .catch(function () {
-      return [];
-    });
-}
+    enc(query) +
+    "&fl[]=identifier&rows=8&page=1&output=json";
 
-/* ---------------- MAIN ---------------- */
-
-function getStreams(
-  tmdbId,
-  mediaType,
-  season,
-  episode
-) {
-  return tmdb(
-    tmdbId,
-    mediaType
-  )
-    .then(function (meta) {
-      var q =
-        variants(
-          meta,
-          mediaType,
-          season,
-          episode
-        );
-
-      /*
-        Only two fastest title searches.
-        All requests run in parallel.
-      */
-
-      q = q.slice(0, 2);
+  return json(url)
+    .then(function (data) {
+      var docs =
+        data &&
+        data.response &&
+        data.response.docs
+          ? data.response.docs
+          : [];
 
       return Promise.all(
-        q.map(function (query) {
-          return Promise.all([
-            adapterWikimedia(query),
-            adapterArchive(query)
-          ]);
+        docs.map(function (doc) {
+          if (!doc.identifier) return Promise.resolve([]);
+
+          var metadataUrl =
+            "https://archive.org/metadata/" +
+            enc(doc.identifier);
+
+          return json(metadataUrl)
+            .then(function (meta) {
+              var files =
+                meta && meta.files
+                  ? meta.files
+                  : [];
+
+              var streams = [];
+
+              files.forEach(function (file) {
+                var name = text(file.name);
+
+                if (!playable(name)) return;
+
+                if (
+                  name.toLowerCase().indexOf("sample") !== -1
+                ) {
+                  return;
+                }
+
+                var direct =
+                  "https://archive.org/download/" +
+                  encodeURIComponent(doc.identifier) +
+                  "/" +
+                  name
+                    .split("/")
+                    .map(encodeURIComponent)
+                    .join("/");
+
+                streams.push(
+                  makeStream(
+                    direct,
+                    name,
+                    "Public",
+                    "Internet Archive"
+                  )
+                );
+              });
+
+              return streams;
+            })
+            .catch(function () {
+              return [];
+            });
         })
       );
     })
     .then(function (groups) {
       var result = [];
 
-      groups.forEach(function (g) {
-        g.forEach(function (items) {
-          result =
-            result.concat(items);
+      groups.forEach(function (group) {
+        result = result.concat(group);
+      });
+
+      return result;
+    });
+}
+
+
+/* =========================================================
+   WIKIMEDIA COMMONS
+   ========================================================= */
+
+function searchWikimedia(title) {
+  var url =
+    "https://commons.wikimedia.org/w/api.php" +
+    "?action=query" +
+    "&generator=search" +
+    "&gsrsearch=" +
+    enc(title + " video") +
+    "&gsrnamespace=6" +
+    "&gsrlimit=8" +
+    "&prop=imageinfo" +
+    "&iiprop=url|mime|size" +
+    "&format=json" +
+    "&origin=*";
+
+  return json(url).then(function (data) {
+    var pages =
+      data &&
+      data.query &&
+      data.query.pages
+        ? data.query.pages
+        : {};
+
+    var streams = [];
+
+    Object.keys(pages).forEach(function (key) {
+      var page = pages[key];
+
+      if (!page.imageinfo || !page.imageinfo[0]) {
+        return;
+      }
+
+      var info = page.imageinfo[0];
+
+      if (!info.url) return;
+
+      var mime = text(info.mime).toLowerCase();
+
+      if (
+        mime.indexOf("video/") !== 0 &&
+        !playable(info.url)
+      ) {
+        return;
+      }
+
+      streams.push(
+        makeStream(
+          info.url,
+          page.title
+            ? page.title.replace(/^File:/, "")
+            : "Wikimedia Video",
+          "Public",
+          "Wikimedia Commons"
+        )
+      );
+    });
+
+    return streams;
+  });
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+function getStreams(tmdbId, mediaType, season, episode) {
+  console.log(
+    "[" +
+      PROVIDER_NAME +
+      "] " +
+      mediaType +
+      " " +
+      tmdbId
+  );
+
+  return resolveTMDB(
+    tmdbId,
+    mediaType,
+    season,
+    episode
+  )
+    .then(function (meta) {
+      var titles = [];
+
+      if (meta.title) {
+        titles.push(meta.title);
+      }
+
+      if (
+        meta.originalTitle &&
+        meta.originalTitle !== meta.title
+      ) {
+        titles.push(meta.originalTitle);
+      }
+
+      return Promise.all(
+        titles.map(function (title) {
+          return Promise.all([
+            searchInternetArchive(title).catch(function () {
+              return [];
+            }),
+
+            searchWikimedia(title).catch(function () {
+              return [];
+            })
+          ]);
+        })
+      );
+    })
+    .then(function (groups) {
+      var streams = [];
+
+      groups.forEach(function (group) {
+        group.forEach(function (sourceGroup) {
+          streams = streams.concat(sourceGroup);
         });
       });
 
-      return unique(result).slice(0, 8);
+      streams = unique(streams);
+
+      console.log(
+        "[" +
+          PROVIDER_NAME +
+          "] Found " +
+          streams.length +
+          " streams"
+      );
+
+      return streams.slice(0, 20);
     })
-    .catch(function (e) {
+    .catch(function (error) {
       console.error(
-        "[VN Global Video]",
-        e && e.message
-          ? e.message
-          : e
+        "[" +
+          PROVIDER_NAME +
+          "] " +
+          (error && error.message
+            ? error.message
+            : error)
       );
 
       return [];
     });
 }
 
-/* ---------------- SETTINGS ---------------- */
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
 
 function onSettings() {
   return [
@@ -347,25 +370,36 @@ function onSettings() {
       type: "header",
       label: "VN Global Video"
     },
+
     {
       type: "info",
       label:
-        "Fast public direct-video sources."
+        "Enter your TMDB API key. It stays in Nuvio provider settings."
     },
+
     {
       type: "text",
       key: "tmdbApiKey",
       label: "TMDB API Key",
-      placeholder:
-        "Paste TMDB API key",
+      placeholder: "Paste TMDB API key",
       description:
-        "Required for movie and TV metadata.",
+        "Required for movie and TV title resolution.",
       isPassword: true
     }
   ];
 }
 
-module.exports = {
-  getStreams: getStreams,
-  onSettings: onSettings
-};
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+if (
+  typeof module !== "undefined" &&
+  module.exports
+) {
+  module.exports = {
+    getStreams: getStreams,
+    onSettings: onSettings
+  };
+}
