@@ -1,0 +1,21 @@
+{
+  "name": "VN Nuvio Repository",
+  "version": "1.0.0",
+  "scrapers": [
+    {
+      "id": "dailymotion",
+      "name": "Dailymotion",
+      "description": "Dailymotion video provider for Nuvio.",
+      "version": "1.0.0",
+      "author": "Vinay Tiwari",
+      "supportedTypes": ["movie", "tv"],
+      "filename": "providers/dailymotion.js",
+      "enabled": true,
+      "limited": true,
+      "hasSettings": true,
+      "supportsExternalPlayer": true,
+      "formats": ["mp4", "m3u8"],
+      "contentLanguage": ["en", "hi"]
+    }
+  ]
+}
