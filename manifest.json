@@ -8,7 +8,10 @@
       "description": "Public direct video provider",
       "version": "1.6.1",
       "author": "Vinay Tiwari",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/globalvideo.js",
       "enabled": true,
       "limited": false,
