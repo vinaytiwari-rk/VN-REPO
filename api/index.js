@@ -34,9 +34,27 @@ function tmdbKey() {
 }
 
 async function tmdb(id, type) {
+  const rawId = String(id || "");
+  const isImdb = /^tt\\d+$/i.test(rawId);
+  if (isImdb) {
+    try {
+      const cm = await getJson("https://v3-cinemeta.strem.io/meta/" + (type === "series" ? "series" : "movie") + "/" + q(rawId) + ".json");
+      if (cm && cm.meta) return {
+        id: rawId,
+        name: cm.meta.name || "",
+        title: cm.meta.name || "",
+        original_name: cm.meta.name || "",
+        poster_path: "",
+        backdrop_path: "",
+        overview: cm.meta.description || ""
+      };
+    } catch (_) {}
+    return null;
+  }
+
   const key = tmdbKey();
   if (!key) return null;
-  const raw = String(id || "").replace(/^tmdb:/, "");
+  const raw = rawId.replace(/^tmdb:/, "");
   const endpoint = type === "series" ? "tv/" : "movie/";
   return getJson("https://api.themoviedb.org/3/" + endpoint + q(raw) + "?api_key=" + q(key) + "&language=en-US");
 }
@@ -148,45 +166,80 @@ async function streamFor(id, type, season, episode) {
   if (!m) return { streams: [] };
 
   const title = titleOf(m, type);
-  const query = type === "series"
-    ? title + " S" + (season || 1) + "E" + (episode || 1)
-    : title;
+  const s = Number(season || 1);
+  const e = Number(episode || 1);
 
-  const [dm, pt] = await Promise.allSettled([dmSearch(query, 12), ptSearch(query, 12)]);
+  // Search progressively: exact episode syntax first, then common short-drama
+  // naming patterns. This prevents a missing "S01E01" label from producing no result.
+  const queries = type === "series"
+    ? [
+        title + " S" + s + "E" + e,
+        title + " S" + String(s).padStart(2, "0") + "E" + String(e).padStart(2, "0"),
+        title + " Episode " + e,
+        title + " Ep " + e,
+        title + " Part " + e,
+        title + " " + e,
+        title + " full"
+      ]
+    : [title, title + " full", title + " full movie"];
+
+  const dmMap = {};
+  const ptMap = {};
+
+  for (const query of queries) {
+    const [dm, pt] = await Promise.allSettled([dmSearch(query, 12), ptSearch(query, 12)]);
+
+    if (dm.status === "fulfilled") {
+      for (const v of dm.value) {
+        if (!v || !v.id || (v.status && v.status !== "published")) continue;
+        if (!relevant(title, v.title)) continue;
+        dmMap[v.id] = v;
+      }
+    }
+
+    if (pt.status === "fulfilled") {
+      for (const v of pt.value) {
+        if (!v || !v.id || !relevant(title, v.name)) continue;
+        ptMap[v.id] = v;
+      }
+    }
+
+    // Once a usable source is found, later broad searches are unnecessary.
+    if (Object.keys(dmMap).length + Object.keys(ptMap).length >= 12) break;
+  }
+
   const streams = [];
 
-  if (dm.status === "fulfilled") {
-    dm.value.forEach(v => {
-      if (!v || !v.id || (v.status && v.status !== "published") || !relevant(title, v.title)) return;
-      streams.push({
-        name: "VN Global Video",
-        title: (v.title || "Dailymotion") + " • Official Player",
-        externalUrl: "https://geo.dailymotion.com/player.html?video=" + q(v.id)
-      });
+  for (const id of Object.keys(dmMap)) {
+    const v = dmMap[id];
+    streams.push({
+      name: "VN Global Video • Dailymotion",
+      title: (v.title || "Dailymotion") + " • Official Player",
+      externalUrl: "https://geo.dailymotion.com/player.html?video=" + q(v.id)
     });
   }
 
-  if (pt.status === "fulfilled") {
-    for (const v of pt.value) {
-      if (!v || !v.id || !relevant(title, v.name)) continue;
-      try {
-        const full = await ptVideo(v.id);
-        (full.streamingPlaylists || []).forEach(p => {
-          if (p && p.playlistUrl) streams.push({
-            name: "VN Global Video",
-            title: (v.name || "PeerTube") + " • HLS",
-            url: p.playlistUrl
-          });
+  for (const id of Object.keys(ptMap)) {
+    const v = ptMap[id];
+    try {
+      const full = await ptVideo(v.id);
+      (full.streamingPlaylists || []).forEach(p => {
+        if (p && p.playlistUrl) streams.push({
+          name: "VN Global Video • PeerTube",
+          title: (v.name || "PeerTube") + " • HLS",
+          url: p.playlistUrl,
+          behaviorHints: { notWebReady: true }
         });
-        (full.files || []).forEach(f => {
-          if (f && f.fileUrl) streams.push({
-            name: "VN Global Video",
-            title: (v.name || "PeerTube") + " • MP4",
-            url: f.fileUrl
-          });
+      });
+      (full.files || []).forEach(file => {
+        if (file && file.fileUrl) streams.push({
+          name: "VN Global Video • PeerTube",
+          title: (v.name || "PeerTube") + " • MP4",
+          url: file.fileUrl,
+          behaviorHints: { notWebReady: false }
         });
-      } catch (_) {}
-    }
+      });
+    } catch (_) {}
   }
 
   const seen = {};
