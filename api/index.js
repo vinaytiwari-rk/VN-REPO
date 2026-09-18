@@ -35,7 +35,7 @@ function tmdbKey() {
 
 async function tmdb(id, type) {
   const rawId = String(id || "");
-  const isImdb = /^tt\\d+$/i.test(rawId);
+  const isImdb = /^tt\d+$/i.test(rawId);
   if (isImdb) {
     try {
       const cm = await getJson("https://v3-cinemeta.strem.io/meta/" + (type === "series" ? "series" : "movie") + "/" + q(rawId) + ".json");
@@ -84,7 +84,7 @@ async function ptVideo(id) {
 }
 
 function norm(s) {
-  return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\\s+/g, " ").trim();
+  return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
 }
 
 function relevant(target, name) {
