@@ -1,116 +1,93 @@
-const PROVIDER_NAME = "VN Global Video";
-const PROVIDER_ID = "globalvideo";
+var PROVIDER_NAME = "VN Global Video";
+var PROVIDER_ID = "globalvideo";
 
-function settings() {
-  return globalThis.SCRAPER_SETTINGS || {};
+function getSettings() {
+  if (typeof SCRAPER_SETTINGS !== "undefined") return SCRAPER_SETTINGS;
+  return {};
 }
 
 function enc(v) {
   return encodeURIComponent(String(v || ""));
 }
 
-function txt(v) {
-  return String(v || "").trim();
-}
-
-function fetchJson(url) {
+function json(url) {
   return fetch(url).then(function (r) {
     if (!r.ok) throw new Error("HTTP " + r.status);
     return r.json();
   });
 }
 
-function direct(url) {
-  if (!url) return false;
-  var u = url.toLowerCase();
-  return u.indexOf(".m3u8") !== -1 ||
-    u.indexOf(".mp4") !== -1 ||
-    u.indexOf(".webm") !== -1 ||
-    u.indexOf(".ogv") !== -1;
+function clean(v) {
+  return String(v || "").trim();
 }
 
-function stream(url, title, quality, format) {
+function norm(v) {
+  return clean(v).toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function makeResult(url, title, quality, format) {
   return {
     name: PROVIDER_NAME,
-    title: txt(title) || "Public Direct Stream",
+    title: title || "Public Video",
     url: url,
-    quality: quality || "Unknown",
+    quality: quality || "Auto",
     provider: PROVIDER_ID,
-    format: format || (url.toLowerCase().indexOf(".m3u8") !== -1 ? "m3u8" : "mp4")
+    format: format || "mp4"
   };
 }
 
-function uniq(items) {
-  var seen = {};
-  var out = [];
-  for (var i = 0; i < items.length; i++) {
-    var x = items[i];
-    if (!x || !x.url || seen[x.url]) continue;
-    seen[x.url] = true;
-    out.push(x);
-  }
-  return out;
-}
-
-function tmdb(id, type, season, episode) {
-  var key = txt(settings().tmdbApiKey);
+function getTmdb(id, type, season, episode) {
+  var key = clean(getSettings().tmdbApiKey);
   if (!key) return Promise.reject(new Error("TMDB API key missing"));
 
   var base = "https://api.themoviedb.org/3/";
-  var show = base + "tv/" + enc(id) + "?api_key=" + enc(key);
-  var movie = base + "movie/" + enc(id) + "?api_key=" + enc(key);
-
   if (type === "tv") {
-    var ep = null;
-    if (season !== undefined && episode !== undefined) {
-      ep = base + "tv/" + enc(id) +
-        "/season/" + enc(season) +
-        "/episode/" + enc(episode) +
-        "?api_key=" + enc(key);
-    }
+    var showUrl = base + "tv/" + enc(id) + "?api_key=" + enc(key);
+    var epUrl = base + "tv/" + enc(id) +
+      "/season/" + enc(season || 1) +
+      "/episode/" + enc(episode || 1) +
+      "?api_key=" + enc(key);
 
     return Promise.all([
-      fetchJson(show).catch(function () { return {}; }),
-      ep ? fetchJson(ep).catch(function () { return {}; }) : Promise.resolve({})
+      json(showUrl),
+      json(epUrl).catch(function () { return {}; })
     ]).then(function (a) {
-      var s = a[0] || {};
-      var e = a[1] || {};
+      var show = a[0] || {};
+      var ep = a[1] || {};
       return {
         type: "tv",
-        title: txt(s.name || s.original_name),
-        originalTitle: txt(s.original_name),
-        episodeTitle: txt(e.name),
+        title: clean(show.name || show.original_name),
+        originalTitle: clean(show.original_name),
+        episodeTitle: clean(ep.name),
         season: parseInt(season, 10) || 1,
         episode: parseInt(episode, 10) || 1
       };
     });
   }
 
-  return fetchJson(movie).then(function (m) {
-    return {
-      type: "movie",
-      title: txt(m.title || m.original_title),
-      originalTitle: txt(m.original_title),
-      episodeTitle: ""
-    };
-  });
+  return json(base + "movie/" + enc(id) + "?api_key=" + enc(key))
+    .then(function (m) {
+      return {
+        type: "movie",
+        title: clean(m.title || m.original_title),
+        originalTitle: clean(m.original_title),
+        episodeTitle: ""
+      };
+    });
 }
 
-function norm(v) {
-  return txt(v).toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
-}
+function matches(target, title) {
+  var a = norm(target.title);
+  var b = norm(title);
+  var ac = a.replace(/ /g, "");
+  var bc = b.replace(/ /g, "");
 
-function match(target, candidate) {
-  var c = norm(candidate);
-  var t = norm(target.title);
-  var o = norm(target.originalTitle);
+  if (!a || !b) return false;
 
-  if (!c || !t) return false;
-
-  var tc = t.replace(/ /g, "");
-  var cc = c.replace(/ /g, "");
-
-  if (tc && cc.indexOf(tc) !== -1) {
+  if (bc.indexOf(ac) !== -1) {
     if (target.type === "movie") return true;
 
     var s = String(target.season);
@@ -118,39 +95,57 @@ function match(target, candidate) {
     var sp = s.length === 1 ? "0" + s : s;
     var ep = e.length === 1 ? "0" + e : e;
 
-    return c.indexOf("s" + sp + "e" + ep) !== -1 ||
-      c.indexOf("s" + s + "e" + e) !== -1 ||
-      (target.episodeTitle && c.indexOf(norm(target.episodeTitle)) !== -1);
+    return b.indexOf("s" + s + "e" + e) !== -1 ||
+      b.indexOf("s" + sp + "e" + ep) !== -1 ||
+      (target.episodeTitle &&
+       b.indexOf(norm(target.episodeTitle)) !== -1);
   }
 
-  if (o) {
-    var oc = o.replace(/ /g, "");
-    if (oc && cc.indexOf(oc) !== -1) return true;
-  }
-
-  return false;
+  return target.originalTitle &&
+    bc.indexOf(norm(target.originalTitle).replace(/ /g, "")) !== -1;
 }
 
-/* DAILYMOTION — isolated adapter */
+/*
+ * Dailymotion:
+ * 1) Search public videos.
+ * 2) If an authorized access token is configured, request the official
+ *    time-limited HLS URL.
+ * 3) Without that permission, return the official Dailymotion player URL
+ *    as an external-player result rather than pretending it is a direct HLS URL.
+ */
 function dailymotion(target) {
-  var s = settings();
-  var token = txt(s.dailymotionAccessToken);
+  var token = clean(getSettings().dailymotionAccessToken);
 
-  var q = target.type === "tv"
+  var query = target.type === "tv"
     ? target.title + " S" + target.season + "E" + target.episode
     : target.title;
 
-  return fetchJson(
+  return json(
     "https://api.dailymotion.com/videos?search=" +
-    enc(q) + "&fields=id,title,status&limit=8"
+    enc(query) +
+    "&fields=id,title,status&limit=10"
   ).then(function (data) {
     var list = data && data.list ? data.list : [];
     var jobs = [];
+    var playerResults = [];
 
     for (var i = 0; i < list.length; i++) {
       (function (item) {
-        if (!item || !item.id || !match(target, item.title || "")) return;
+        if (!item || !item.id) return;
         if (item.status && item.status !== "published") return;
+        if (!matches(target, item.title || "")) return;
+
+        if (!token) {
+          playerResults.push(
+            makeResult(
+              "https://geo.dailymotion.com/player.html?video=" + enc(item.id),
+              (item.title || "Dailymotion") + " [Dailymotion Player]",
+              "Auto",
+              "web"
+            )
+          );
+          return;
+        }
 
         jobs.push(
           fetch(
@@ -160,32 +155,27 @@ function dailymotion(target) {
               method: "POST",
               headers: {
                 "Authorization": "Bearer " + token,
-                "Content-Type": "application/json",
-                "Accept": "application/json"
+                "Content-Type": "application/json"
               },
               body: JSON.stringify({ protocol: "hls" })
             }
           ).then(function (r) {
-            if (!r.ok) throw new Error("Dailymotion streams HTTP " + r.status);
+            if (!r.ok) return [];
             return r.json();
-          }).then(function (meta) {
-            var urls = meta && meta.stream_urls ? meta.stream_urls : [];
-            var out = [];
-
-            for (var u = 0; u < urls.length; u++) {
-              var url = urls[u] && urls[u].stream_url;
-              if (direct(url)) {
-                out.push(stream(
-                  url,
+          }).then(function (x) {
+            var urls = x && x.stream_urls ? x.stream_urls : [];
+            for (var j = 0; j < urls.length; j++) {
+              var u = urls[j] && urls[j].stream_url;
+              if (u) {
+                return [makeResult(
+                  u,
                   (item.title || "Dailymotion") + " [HLS]",
                   "Auto",
                   "m3u8"
-                ));
-                break;
+                )];
               }
             }
-
-            return out;
+            return [];
           }).catch(function () {
             return [];
           })
@@ -193,91 +183,69 @@ function dailymotion(target) {
       })(list[i]);
     }
 
+    if (!token) return playerResults.slice(0, 6);
+
     return Promise.all(jobs).then(function (groups) {
       var out = [];
-      for (var j = 0; j < groups.length; j++) out = out.concat(groups[j]);
-
-      if (!token) {
-        for (var k = 0; k < list.length; k++) {
-          var item = list[k];
-          if (!item || !item.id || !match(target, item.title || "")) continue;
-
-          out.push({
-            name: PROVIDER_NAME,
-            title: (item.title || "Dailymotion Video") + " [Dailymotion Player]",
-            url: "https://geo.dailymotion.com/player.html?video=" + enc(item.id),
-            quality: "Auto",
-            provider: PROVIDER_ID
-          });
-        }
-      }
-
-      return out;
+      for (var k = 0; k < groups.length; k++) out = out.concat(groups[k]);
+      return out.slice(0, 6);
     });
   }).catch(function () {
     return [];
   });
 }
 
-/* PEERTUBE — isolated adapter */
 function peertube(target) {
-  var q = target.type === "tv"
+  var query = target.type === "tv"
     ? target.title + " S" + target.season + "E" + target.episode
     : target.title;
 
-  return fetchJson(
+  return json(
     "https://peertube.tv/api/v1/search/videos?search=" +
-    enc(q) + "&count=5"
+    enc(query) + "&count=5"
   ).then(function (data) {
     var list = data && data.data ? data.data : [];
     var jobs = [];
 
     for (var i = 0; i < list.length; i++) {
       (function (item) {
-        if (!item || !item.id || !match(target, item.name || "")) return;
+        if (!item || !item.id || !matches(target, item.name || "")) return;
 
         jobs.push(
-          fetchJson(
-            "https://peertube.tv/api/v1/videos/" + enc(item.id)
-          ).then(function (v) {
-            var out = [];
-
-            if (v && v.streamingPlaylists) {
-              for (var p = 0; p < v.streamingPlaylists.length; p++) {
-                var hls = v.streamingPlaylists[p] &&
-                  v.streamingPlaylists[p].playlistUrl;
-
-                if (direct(hls)) {
-                  out.push(stream(
-                    hls,
-                    (item.name || "PeerTube") + " [HLS]",
-                    "Auto",
-                    "m3u8"
-                  ));
-                  break;
+          json("https://peertube.tv/api/v1/videos/" + enc(item.id))
+            .then(function (v) {
+              if (v && v.streamingPlaylists) {
+                for (var p = 0; p < v.streamingPlaylists.length; p++) {
+                  var h = v.streamingPlaylists[p] &&
+                    v.streamingPlaylists[p].playlistUrl;
+                  if (h) {
+                    return [makeResult(
+                      h,
+                      (item.name || "PeerTube") + " [HLS]",
+                      "Auto",
+                      "m3u8"
+                    )];
+                  }
                 }
               }
-            }
 
-            if (!out.length && v && v.files) {
-              for (var f = 0; f < v.files.length; f++) {
-                var mp4 = v.files[f] && v.files[f].fileUrl;
-                if (direct(mp4)) {
-                  out.push(stream(
-                    mp4,
-                    (item.name || "PeerTube") + " [MP4]",
-                    "Auto",
-                    "mp4"
-                  ));
-                  break;
+              if (v && v.files) {
+                for (var q = 0; q < v.files.length; q++) {
+                  var mp4 = v.files[q] && v.files[q].fileUrl;
+                  if (mp4) {
+                    return [makeResult(
+                      mp4,
+                      (item.name || "PeerTube") + " [MP4]",
+                      "Auto",
+                      "mp4"
+                    )];
+                  }
                 }
               }
-            }
 
-            return out;
-          }).catch(function () {
-            return [];
-          })
+              return [];
+            })
+            .catch(function () { return []; })
         );
       })(list[i]);
     }
@@ -285,7 +253,7 @@ function peertube(target) {
     return Promise.all(jobs).then(function (groups) {
       var out = [];
       for (var j = 0; j < groups.length; j++) out = out.concat(groups[j]);
-      return out;
+      return out.slice(0, 6);
     });
   }).catch(function () {
     return [];
@@ -293,7 +261,9 @@ function peertube(target) {
 }
 
 function getStreams(tmdbId, mediaType, season, episode) {
-  return tmdb(tmdbId, mediaType, season, episode)
+  if (!tmdbId) return Promise.resolve([]);
+
+  return getTmdb(tmdbId, mediaType, season, episode)
     .then(function (target) {
       return Promise.all([
         dailymotion(target),
@@ -302,12 +272,21 @@ function getStreams(tmdbId, mediaType, season, episode) {
     })
     .then(function (groups) {
       var all = [];
-      for (var i = 0; i < groups.length; i++) all = all.concat(groups[i]);
-      all = uniq(all);
-      return all.slice(0, 8);
+      var seen = {};
+
+      for (var i = 0; i < groups.length; i++) {
+        for (var j = 0; j < groups[i].length; j++) {
+          var item = groups[i][j];
+          if (!item || !item.url || seen[item.url]) continue;
+          seen[item.url] = true;
+          all.push(item);
+        }
+      }
+
+      return all.slice(0, 10);
     })
-    .catch(function (err) {
-      console.error("[" + PROVIDER_NAME + "] " + (err && err.message ? err.message : err));
+    .catch(function (e) {
+      console.error("[" + PROVIDER_NAME + "] " + (e && e.message ? e.message : e));
       return [];
     });
 }
@@ -315,25 +294,26 @@ function getStreams(tmdbId, mediaType, season, episode) {
 function onSettings() {
   return [
     { type: "header", label: "VN Global Video" },
-    { type: "info", label: "Enter your TMDB API key." },
+    {
+      type: "info",
+      label: "TMDB API key is required for title and episode matching."
+    },
     {
       type: "text",
       key: "tmdbApiKey",
       label: "TMDB API Key",
       placeholder: "Paste TMDB API key",
-      description: "Required for movie and TV metadata.",
       isPassword: true
     },
     {
       type: "info",
-      label: "Optional: Dailymotion direct streams require your authorized Dailymotion access token."
+      label: "Dailymotion Access Token is optional. Do not enter your API Secret here."
     },
     {
       type: "text",
       key: "dailymotionAccessToken",
       label: "Dailymotion Access Token",
-      placeholder: "Paste authorized access token",
-      description: "Used only for Dailymotion's official stream URL API.",
+      placeholder: "Paste access token",
       isPassword: true
     }
   ];
