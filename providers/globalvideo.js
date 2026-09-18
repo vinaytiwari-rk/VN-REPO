@@ -136,10 +136,6 @@ function dailymotion(target) {
   var s = settings();
   var token = txt(s.dailymotionAccessToken);
 
-  if (!token) {
-    return Promise.resolve([]);
-  }
-
   var q = target.type === "tv"
     ? target.title + " S" + target.season + "E" + target.episode
     : target.title;
@@ -200,6 +196,22 @@ function dailymotion(target) {
     return Promise.all(jobs).then(function (groups) {
       var out = [];
       for (var j = 0; j < groups.length; j++) out = out.concat(groups[j]);
+
+      if (!token) {
+        for (var k = 0; k < list.length; k++) {
+          var item = list[k];
+          if (!item || !item.id || !match(target, item.title || "")) continue;
+
+          out.push({
+            name: PROVIDER_NAME,
+            title: (item.title || "Dailymotion Video") + " [Dailymotion Player]",
+            url: "https://geo.dailymotion.com/player.html?video=" + enc(item.id),
+            quality: "Auto",
+            provider: PROVIDER_ID
+          });
+        }
+      }
+
       return out;
     });
   }).catch(function () {
