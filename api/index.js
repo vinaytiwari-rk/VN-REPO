@@ -3,6 +3,9 @@ const https = require("https");
 function send(res, status, body) {
   res.statusCode = status;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "*");
   res.setHeader("Cache-Control", "no-store");
   res.end(JSON.stringify(body));
 }
@@ -228,6 +231,8 @@ module.exports = async function(req, res) {
     const seasonParam = parsed.searchParams.get("season") || "";
     const episodeParam = parsed.searchParams.get("episode") || "";
 
+    if (req.method === "OPTIONS") return send(res, 200, { ok: true });
+
     if (path === "/manifest.json" || path === "/manifest") {
       return send(res, 200, require("../manifest.json"));
     }
@@ -243,8 +248,21 @@ module.exports = async function(req, res) {
 
     if (parts[0] === "stream") {
       const type = parts[1] === "series" ? "series" : "movie";
-      const id = parts[2] || "";
-      return send(res, 200, await streamFor(id, type, seasonParam, episodeParam));
+      let id = decodeURIComponent(parts[2] || "").replace(/\.json$/, "");
+      let season = seasonParam;
+      let episode = episodeParam;
+
+      // Stremio/Nuvio series IDs commonly arrive as tmdb:<id>:<season>:<episode>.
+      if (type === "series") {
+        const m = id.match(/^(.*?)(?::(\d+))(?::(\d+))$/);
+        if (m) {
+          id = m[1];
+          season = season || m[2];
+          episode = episode || m[3];
+        }
+      }
+
+      return send(res, 200, await streamFor(id, type, season, episode));
     }
 
     return send(res, 404, { error: "Not Found" });
