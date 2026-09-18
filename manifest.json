@@ -5,30 +5,9 @@
   "description": "Global public and authorized video discovery addon with multi-source episode fallback.",
   "logo": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/assets/logo.png",
   "resources": [
-    {
-      "name": "catalog",
-      "types": [
-        "movie",
-        "series"
-      ]
-    },
-    {
-      "name": "meta",
-      "types": [
-        "movie",
-        "series"
-      ]
-    },
-    {
-      "name": "stream",
-      "types": [
-        "movie",
-        "series"
-      ],
-      "idPrefixes": [
-        "tt"
-      ]
-    }
+    "catalog",
+    "meta",
+    "stream"
   ],
   "types": [
     "movie",
@@ -57,5 +36,8 @@
         }
       ]
     }
+  ],
+  "idPrefixes": [
+    "tt"
   ]
 }
