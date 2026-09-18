@@ -1,44 +1,21 @@
 {
   "name": "VN Nuvio Repository",
-  "version": "1.8.0",
+  "version": "1.6.1",
   "scrapers": [
     {
       "id": "globalvideo",
       "name": "VN Global Video",
-      "description": "Global video provider streaming direct playable HLS and MP4 streams from Dailymotion and PeerTube.",
-      "version": "1.8.0",
+      "description": "Global public-video provider with direct playable public video sources.",
+      "version": "1.6.1",
       "author": "Vinay Tiwari",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
+      "supportedTypes": ["movie","tv"],
       "filename": "providers/globalvideo.js",
       "enabled": true,
       "limited": false,
       "hasSettings": true,
       "supportsExternalPlayer": true,
-      "formats": [
-        "m3u8",
-        "mp4",
-        "webm"
-      ],
-      "contentLanguage": [
-        "en",
-        "hi",
-        "ru",
-        "zh",
-        "ja",
-        "ko",
-        "es",
-        "fr",
-        "de",
-        "tr",
-        "pt",
-        "ar",
-        "it",
-        "nl",
-        "pl"
-      ]
+      "formats": ["mp4","m3u8","webm","ogv"],
+      "contentLanguage": ["en","hi","ru","zh","ja","ko","es","fr","de","tr","pt","ar","it","nl","pl"]
     }
   ]
 }
