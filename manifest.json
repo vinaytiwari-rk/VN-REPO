@@ -1,12 +1,12 @@
 {
   "name": "VN Nuvio Repository",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "scrapers": [
     {
       "id": "globalvideo",
       "name": "VN Global Video",
-      "description": "Global public-video provider with isolated Dailymotion and PeerTube adapters.",
-      "version": "1.6.2",
+      "description": "Global public-video provider with isolated Dailymotion and PeerTube adapters with official authorized stream support.",
+      "version": "1.6.3",
       "author": "Vinay Tiwari",
       "supportedTypes": ["movie","tv"],
       "filename": "providers/globalvideo.js",
