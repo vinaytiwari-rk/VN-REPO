@@ -289,7 +289,8 @@ module.exports = async function(req, res) {
   try {
     const u = new URL(req.url, "https://vn-global-video-addon.vercel.app");
     const resource = u.searchParams.get("resource") || "";
-    const rawType = u.searchParams.get("type") || "";\n    const type = rawType === "tv" ? "series" : rawType;
+    const rawType = u.searchParams.get("type") || "";
+    const type = rawType === "tv" ? "series" : rawType;
     const id = u.searchParams.get("id") || "";
     const extra = u.searchParams.get("extra") || "";
     const search = u.searchParams.get("search") || "";
@@ -321,7 +322,7 @@ module.exports = async function(req, res) {
       let episode = episodeParam;
 
       // Cinemeta series video IDs: ttXXXXXXXX:season:episode
-      if (type === "series") {
+      {
         const m = streamId.match(/^(.*?):(\d+):(\d+)$/);
         if (m) {
           streamId = m[1];
