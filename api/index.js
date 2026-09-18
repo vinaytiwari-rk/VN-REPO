@@ -277,46 +277,50 @@ async function meta(id, type) {
 
 module.exports = async function(req, res) {
   try {
-    const originalPath = (req.headers && (req.headers["x-matched-path"] || req.headers["x-invoke-path"])) || req.url;
-    const parsed = new URL(originalPath, "https://vn-global-video-addon.vercel.app");
-    const path = parsed.pathname;
-    const parts = path.split("/").filter(Boolean);
-    const search = parsed.searchParams.get("search") || "";
-    const seasonParam = parsed.searchParams.get("season") || "";
-    const episodeParam = parsed.searchParams.get("episode") || "";
+    const u = new URL(req.url, "https://vn-global-video-addon.vercel.app");
+    const resource = u.searchParams.get("resource") || "";
+    const type = u.searchParams.get("type") || "";
+    const id = u.searchParams.get("id") || "";
+    const extra = u.searchParams.get("extra") || "";
+    const search = u.searchParams.get("search") || "";
+    const seasonParam = u.searchParams.get("season") || "";
+    const episodeParam = u.searchParams.get("episode") || "";
 
     if (req.method === "OPTIONS") return send(res, 200, { ok: true });
 
-    if (path === "/manifest.json" || path === "/manifest") {
+    if (resource === "manifest") {
       return send(res, 200, require("../manifest.json"));
     }
 
-    if (parts[0] === "catalog") {
-      const type = parts[1] === "series" ? "series" : "movie";
-      return send(res, 200, await catalog(type, search));
+    if (resource === "catalog") {
+      let catalogSearch = search;
+      if (!catalogSearch && extra) {
+        const p = new URLSearchParams(extra);
+        catalogSearch = p.get("search") || "";
+      }
+      return send(res, 200, await catalog(type === "series" ? "series" : "movie", catalogSearch));
     }
 
-    if (parts[0] === "meta") {
-      return send(res, 200, await meta(parts[2] || "", parts[1] === "series" ? "series" : "movie"));
+    if (resource === "meta") {
+      return send(res, 200, await meta(id, type === "series" ? "series" : "movie"));
     }
 
-    if (parts[0] === "stream") {
-      const type = parts[1] === "series" ? "series" : "movie";
-      let id = decodeURIComponent(parts[2] || "").replace(/\.json$/, "");
+    if (resource === "stream") {
+      let streamId = decodeURIComponent(id).replace(/\.json$/, "");
       let season = seasonParam;
       let episode = episodeParam;
 
-      // Stremio/Nuvio series IDs commonly arrive as tmdb:<id>:<season>:<episode>.
+      // Cinemeta series video IDs: ttXXXXXXXX:season:episode
       if (type === "series") {
-        const m = id.match(/^(.*?)(?::(\d+))(?::(\d+))$/);
+        const m = streamId.match(/^(.*?):(\d+):(\d+)$/);
         if (m) {
-          id = m[1];
-          season = season || m[2];
-          episode = episode || m[3];
+          streamId = m[1];
+          season = m[2];
+          episode = m[3];
         }
       }
 
-      return send(res, 200, await streamFor(id, type, season, episode));
+      return send(res, 200, await streamFor(streamId, type, season, episode));
     }
 
     return send(res, 404, { error: "Not Found" });
