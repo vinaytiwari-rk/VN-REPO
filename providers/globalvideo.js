@@ -2,10 +2,10 @@
  * VN Global Video Provider
  * Provider ID: globalvideo
  * Author: Vinay Tiwari
- * Version: 1.6.0
+ * Version: 1.6.1
  * 
  * Optimized for Nuvio Android (Hermes / QuickJS runtime)
- * Fast public video stream discovery & mobile-friendly relevance matching
+ * High-performance, low-latency public video discovery
  */
 
 (function () {
@@ -13,7 +13,7 @@
 
   var PROVIDER_NAME = 'VN Global Video';
   var PROVIDER_ID = 'globalvideo';
-  var REQUEST_TIMEOUT_MS = 6000;
+  var REQUEST_TIMEOUT_MS = 6500;
 
   var STOP_WORDS = {
     'the': 1, 'a': 1, 'an': 1, 'and': 1, 'or': 1, 'of': 1, 'in': 1, 'on': 1,
@@ -43,7 +43,7 @@
     /\bbloopers\b/i
   ];
 
-  /* ---------------------- UTILITY FUNCTIONS ---------------------- */
+  /* ---------------------- UTILITIES ---------------------- */
 
   function pad2(num) {
     var n = parseInt(num, 10);
@@ -116,24 +116,48 @@
   }
 
   function getApiKey() {
-    var settings = null;
-    if (typeof globalThis !== 'undefined' && globalThis && globalThis.SCRAPER_SETTINGS) {
-      settings = globalThis.SCRAPER_SETTINGS;
-    } else if (typeof SCRAPER_SETTINGS !== 'undefined' && SCRAPER_SETTINGS) {
-      settings = SCRAPER_SETTINGS;
+    var s = null;
+    if (typeof globalThis !== 'undefined' && globalThis) {
+      s = globalThis.SCRAPER_SETTINGS || globalThis.SETTINGS || globalThis.globalvideo_SETTINGS || globalThis.settings;
     }
-    if (settings && typeof settings.tmdbApiKey === 'string') {
-      var key = settings.tmdbApiKey.trim();
-      if (key.length > 0) return key;
+    if (!s && typeof SCRAPER_SETTINGS !== 'undefined') {
+      s = SCRAPER_SETTINGS;
+    }
+    if (!s && typeof SETTINGS !== 'undefined') {
+      s = SETTINGS;
+    }
+    if (s) {
+      if (typeof s.tmdbApiKey === 'string' && s.tmdbApiKey.trim().length > 0) {
+        return s.tmdbApiKey.trim();
+      }
+      if (typeof s.apiKey === 'string' && s.apiKey.trim().length > 0) {
+        return s.apiKey.trim();
+      }
     }
     return '';
   }
 
-  /* ---------------------- TMDB METADATA ---------------------- */
+  /* ---------------------- TMDB API ---------------------- */
+
+  function fetchTmdb(endpoint, apiKey) {
+    var baseUrl = 'https://api.themoviedb.org/3' + endpoint;
+    var cleanKey = (apiKey || '').trim();
+    var headers = {};
+    var url = baseUrl;
+
+    if (cleanKey.length > 40 || cleanKey.indexOf('ey') === 0) {
+      headers['Authorization'] = 'Bearer ' + cleanKey;
+      headers['Accept'] = 'application/json';
+    } else if (cleanKey.length > 0) {
+      var sep = url.indexOf('?') === -1 ? '?' : '&';
+      url = url + sep + 'api_key=' + encodeURIComponent(cleanKey);
+    }
+
+    return fetchJson(url, { headers: headers }, 5000);
+  }
 
   function getMovieMetadata(tmdbId, apiKey) {
     if (!apiKey) {
-      // Graceful fallback when tmdbId is used directly as title during testing
       var rawTitle = String(tmdbId || '').trim();
       return Promise.resolve({
         mediaType: 'movie',
@@ -144,8 +168,7 @@
       });
     }
 
-    var url = 'https://api.themoviedb.org/3/movie/' + encodeURIComponent(tmdbId) + '?api_key=' + encodeURIComponent(apiKey);
-    return fetchJson(url, {}, 5000)
+    return fetchTmdb('/movie/' + encodeURIComponent(tmdbId), apiKey)
       .then(function (data) {
         var title = data.title || data.original_title || String(tmdbId);
         var origTitle = data.original_title || '';
@@ -189,18 +212,12 @@
       });
     }
 
-    var showUrl = 'https://api.themoviedb.org/3/tv/' + encodeURIComponent(tmdbId) + '?api_key=' + encodeURIComponent(apiKey);
-    var epUrl = null;
-    if (season !== undefined && season !== null && episode !== undefined && episode !== null) {
-      epUrl = 'https://api.themoviedb.org/3/tv/' + encodeURIComponent(tmdbId) + '/season/' + encodeURIComponent(season) + '/episode/' + encodeURIComponent(episode) + '?api_key=' + encodeURIComponent(apiKey);
-    }
-
-    var showPromise = fetchJson(showUrl, {}, 5000).catch(function () {
+    var showPromise = fetchTmdb('/tv/' + encodeURIComponent(tmdbId), apiKey).catch(function () {
       return null;
     });
 
-    var epPromise = epUrl
-      ? fetchJson(epUrl, {}, 5000).catch(function () {
+    var epPromise = (season !== undefined && season !== null && episode !== undefined && episode !== null)
+      ? fetchTmdb('/tv/' + encodeURIComponent(tmdbId) + '/season/' + encodeURIComponent(season) + '/episode/' + encodeURIComponent(episode), apiKey).catch(function () {
           return null;
         })
       : Promise.resolve(null);
@@ -288,7 +305,7 @@
         score = Math.max(score, 70);
       }
 
-      // Year validation bonus
+      // Year bonus
       if (target.year && target.year.length === 4) {
         if (candNorm.indexOf(target.year) !== -1) {
           score += 20;
@@ -381,7 +398,6 @@
         }
       }
 
-      // Episode title match if distinct
       if (target.episodeName) {
         var epNorm = normalizeText(target.episodeName);
         var epTokens = getTokens(target.episodeName);
@@ -401,7 +417,6 @@
         }
       }
 
-      // For TV, reject if no season/episode confirmation
       if (!hasSeasonEpMatch) {
         return 0;
       }
@@ -465,19 +480,19 @@
     var searchQuery = '';
     if (target.mediaType === 'movie') {
       var cleanTitle = normalizeText(target.title);
-      searchQuery = 'title:(' + cleanTitle.replace(/"/g, '') + ') AND mediatype:movies';
+      searchQuery = 'title:("' + cleanTitle.replace(/"/g, '') + '") AND mediatype:(movies)';
     } else {
       var cleanSeries = normalizeText(target.seriesName);
       var sPad = pad2(target.season);
       var ePad = pad2(target.episode);
       var epQuery = cleanSeries + ' S' + sPad + 'E' + ePad;
-      searchQuery = '(title:(' + epQuery.replace(/"/g, '') + ') OR title:(' + cleanSeries.replace(/"/g, '') + ')) AND mediatype:movies';
+      searchQuery = '(title:("' + epQuery.replace(/"/g, '') + '") OR (title:("' + cleanSeries.replace(/"/g, '') + '") AND description:("S' + sPad + 'E' + ePad + '")) OR title:("' + cleanSeries.replace(/"/g, '') + ' Season ' + target.season + ' Episode ' + target.episode + '")) AND mediatype:(movies)';
     }
 
     var searchUrl = 'https://archive.org/advancedsearch.php?q=' + encodeURIComponent(searchQuery) +
       '&fl[]=identifier,title,mediatype,year,description' +
       '&sort[]=downloads+desc' +
-      '&rows=3&page=1&output=json';
+      '&rows=4&page=1&output=json';
 
     return fetchJson(searchUrl, {}, 5500)
       .then(function (data) {
@@ -507,7 +522,7 @@
         scoredDocs.sort(function (a, b) {
           return b.score - a.score;
         });
-        var topDocs = scoredDocs.slice(0, 2);
+        var topDocs = scoredDocs.slice(0, 3);
 
         var metaPromises = [];
         for (var d = 0; d < topDocs.length; d++) {
@@ -546,7 +561,6 @@
                     continue;
                   }
 
-                  // Reasonable size check
                   if (size > 0 && (size < 2 * 1024 * 1024 || size > 3.5 * 1024 * 1024 * 1024)) {
                     continue;
                   }
@@ -562,7 +576,6 @@
 
                   if (!isVideoFormat) continue;
 
-                  // Safely encode path segments for download URL
                   var pathSegments = fileName.split('/').map(encodeURIComponent).join('/');
                   var directUrl = 'https://archive.org/download/' + encodeURIComponent(candidate.identifier) + '/' + pathSegments;
                   var detectedFmt = detectFormat(fileName, format);
@@ -666,6 +679,13 @@
   /* ---------------------- MAIN ENTRY POINT ---------------------- */
 
   function getStreams(tmdbId, mediaType, season, episode) {
+    if (typeof tmdbId === 'object' && tmdbId !== null) {
+      mediaType = tmdbId.type || tmdbId.mediaType || 'movie';
+      season = tmdbId.season;
+      episode = tmdbId.episode;
+      tmdbId = tmdbId.tmdbId || tmdbId.id;
+    }
+
     if (!tmdbId) {
       return Promise.resolve([]);
     }
@@ -674,7 +694,7 @@
     if (isTv) {
       console.log('[' + PROVIDER_NAME + '] TV ' + tmdbId + ' S' + season + ' E' + episode);
     } else {
-      console.log('[' + PROVIDER_NAME + '] ' + mediaType + ' ' + tmdbId);
+      console.log('[' + PROVIDER_NAME + '] ' + (mediaType || 'movie') + ' ' + tmdbId);
     }
 
     var apiKey = getApiKey();
