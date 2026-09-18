@@ -46,7 +46,8 @@ async function tmdb(id, type) {
         original_name: cm.meta.name || "",
         poster_path: "",
         backdrop_path: "",
-        overview: cm.meta.description || ""
+        overview: cm.meta.description || "",
+        videos: Array.isArray(cm.meta.videos) ? cm.meta.videos : []
       };
     } catch (_) {}
     return null;
@@ -327,12 +328,26 @@ async function meta(id, type) {
     } : null };
   }
   const m = await tmdb(id, type);
-  return { meta: m ? {
+  if (!m) return { meta: null };
+  const out = {
     id, type, name: titleOf(m, type),
     poster: m.poster_path ? "https://image.tmdb.org/t/p/w500" + m.poster_path : undefined,
     background: m.backdrop_path ? "https://image.tmdb.org/t/p/w1280" + m.backdrop_path : undefined,
     description: m.overview || undefined
-  } : null };
+  };
+  if (type === "series" && Array.isArray(m.videos) && m.videos.length) {
+    out.videos = m.videos.map(v => ({
+      id: v.id,
+      title: v.title || ("Episode " + (v.episode || "")),
+      season: Number(v.season || 1),
+      episode: Number(v.episode || 1),
+      released: v.released || new Date().toISOString(),
+      thumbnail: v.thumbnail,
+      overview: v.overview,
+      available: true
+    }));
+  }
+  return { meta: out };
 }
 
 module.exports = async function(req, res) {
