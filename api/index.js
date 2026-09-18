@@ -277,7 +277,8 @@ async function meta(id, type) {
 
 module.exports = async function(req, res) {
   try {
-    const parsed = new URL(req.url, "https://vn-global-video-addon.vercel.app");
+    const originalPath = (req.headers && (req.headers["x-matched-path"] || req.headers["x-invoke-path"])) || req.url;
+    const parsed = new URL(originalPath, "https://vn-global-video-addon.vercel.app");
     const path = parsed.pathname;
     const parts = path.split("/").filter(Boolean);
     const search = parsed.searchParams.get("search") || "";
