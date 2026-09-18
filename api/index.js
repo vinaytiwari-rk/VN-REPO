@@ -221,8 +221,12 @@ async function meta(id, type) {
 
 module.exports = async function(req, res) {
   try {
-    const path = req.url.split("?")[0];
+    const parsed = new URL(req.url, "https://vn-global-video-addon.vercel.app");
+    const path = parsed.pathname;
     const parts = path.split("/").filter(Boolean);
+    const search = parsed.searchParams.get("search") || "";
+    const seasonParam = parsed.searchParams.get("season") || "";
+    const episodeParam = parsed.searchParams.get("episode") || "";
 
     if (path === "/manifest.json" || path === "/manifest") {
       return send(res, 200, require("../manifest.json"));
@@ -230,9 +234,7 @@ module.exports = async function(req, res) {
 
     if (parts[0] === "catalog") {
       const type = parts[1] === "series" ? "series" : "movie";
-      const extra = decodeURIComponent(parts.slice(3).join("/"));
-      const match = extra.match(/search=([^&]+)/);
-      return send(res, 200, await catalog(type, match ? decodeURIComponent(match[1]) : ""));
+      return send(res, 200, await catalog(type, search));
     }
 
     if (parts[0] === "meta") {
@@ -242,10 +244,7 @@ module.exports = async function(req, res) {
     if (parts[0] === "stream") {
       const type = parts[1] === "series" ? "series" : "movie";
       const id = parts[2] || "";
-      const extra = decodeURIComponent(parts.slice(3).join("/"));
-      const sm = extra.match(/season=(\\d+)/);
-      const em = extra.match(/episode=(\\d+)/);
-      return send(res, 200, await streamFor(id, type, sm && sm[1], em && em[1]));
+      return send(res, 200, await streamFor(id, type, seasonParam, episodeParam));
     }
 
     return send(res, 404, { error: "Not Found" });
