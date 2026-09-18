@@ -6,10 +6,11 @@
     }
   },
   "rewrites": [
-    { "source": "/manifest.json", "destination": "/api" },
-    { "source": "/manifest", "destination": "/api" },
-    { "source": "/catalog/:path*", "destination": "/api" },
-    { "source": "/meta/:path*", "destination": "/api" },
-    { "source": "/stream/:path*", "destination": "/api" }
+    { "source": "/manifest.json", "destination": "/api?resource=manifest" },
+    { "source": "/manifest", "destination": "/api?resource=manifest" },
+    { "source": "/catalog/:type/:id.json", "destination": "/api?resource=catalog&type=:type&id=:id" },
+    { "source": "/catalog/:type/:id/:extra.json", "destination": "/api?resource=catalog&type=:type&id=:id&extra=:extra" },
+    { "source": "/meta/:type/:id.json", "destination": "/api?resource=meta&type=:type&id=:id" },
+    { "source": "/stream/:type/:id.json", "destination": "/api?resource=stream&type=:type&id=:id" }
   ]
 }
