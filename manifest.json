@@ -1,21 +1,24 @@
 {
-  "name": "VN Nuvio Repository",
-  "version": "1.6.5",
-  "scrapers": [
+  "id": "vn-global-video",
+  "version": "2.0.0",
+  "name": "VN Global Video",
+  "description": "Global public and authorized video discovery addon for Nuvio/Stremio-compatible clients.",
+  "logo": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/assets/logo.png",
+  "resources": ["catalog", "meta", "stream"],
+  "types": ["movie", "series"],
+  "idPrefixes": ["tmdb:", "tt"],
+  "catalogs": [
     {
-      "id": "globalvideo",
+      "type": "movie",
+      "id": "vn-global",
       "name": "VN Global Video",
-      "description": "Global public-video provider with isolated Dailymotion and PeerTube adapters with official authorized stream support.",
-      "version": "1.6.5",
-      "author": "Vinay Tiwari",
-      "supportedTypes": ["movie","tv"],
-      "filename": "providers/globalvideo.js",
-      "enabled": true,
-      "limited": false,
-      "hasSettings": true,
-      "supportsExternalPlayer": true,
-      "formats": ["mp4","m3u8","webm","ogv"],
-      "contentLanguage": ["en","hi","ru","zh","ja","ko","es","fr","de","tr","pt","ar","it","nl","pl"]
+      "extra": [{ "name": "search", "isRequired": false }]
+    },
+    {
+      "type": "series",
+      "id": "vn-global",
+      "name": "VN Global Video",
+      "extra": [{ "name": "search", "isRequired": false }]
     }
   ]
 }
