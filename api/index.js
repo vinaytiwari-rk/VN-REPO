@@ -289,7 +289,7 @@ module.exports = async function(req, res) {
   try {
     const u = new URL(req.url, "https://vn-global-video-addon.vercel.app");
     const resource = u.searchParams.get("resource") || "";
-    const type = u.searchParams.get("type") || "";
+    const rawType = u.searchParams.get("type") || "";\n    const type = rawType === "tv" ? "series" : rawType;
     const id = u.searchParams.get("id") || "";
     const extra = u.searchParams.get("extra") || "";
     const search = u.searchParams.get("search") || "";
