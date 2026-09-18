@@ -1,17 +1,21 @@
-[
-  {
-    "id": "vn-altarboy",
-    "name": "VN Altarboy 2026",
-    "description": "Official ReelShort Altarboy 2026 provider.",
-    "version": "1.1.0",
-    "author": "VN",
-    "supportedTypes": ["tv"],
-    "filename": "providers/altarboy.js",
-    "enabled": true,
-    "contentLanguage": ["en"],
-    "formats": [],
-    "limited": true,
-    "disabledPlatforms": [],
-    "supportsExternalPlayer": true
-  }
-]
+{
+  "name": "VN Global Video Providers",
+  "version": "1.0.0",
+  "description": "VN Global Video Nuvio provider repository.",
+  "author": "VN",
+  "scrapers": [
+    {
+      "id": "vn-altarboy",
+      "name": "VN Altarboy 2026",
+      "description": "Official ReelShort Altarboy 2026 provider.",
+      "version": "1.1.0",
+      "filename": "providers/altarboy.js",
+      "supportedTypes": ["tv"],
+      "enabled": true,
+      "contentLanguage": ["en"],
+      "formats": [],
+      "disabledPlatforms": [],
+      "supportsExternalPlayer": true
+    }
+  ]
+}
