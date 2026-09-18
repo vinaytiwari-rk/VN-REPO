@@ -24,6 +24,9 @@
       "types": [
         "movie",
         "series"
+      ],
+      "idPrefixes": [
+        "tt"
       ]
     }
   ],
