@@ -71,6 +71,35 @@ async function dmSearch(query, limit) {
   return (data && data.list) || [];
 }
 
+async function dmResolve(vid) {
+  try {
+    const headers = {
+      "User-Agent": "Mozilla/5.0",
+      "Referer": "https://www.dailymotion.com/"
+    };
+    const data = await getJson(
+      "https://www.dailymotion.com/player/metadata/video/" + encodeURIComponent(vid),
+      headers
+    );
+    const quals = data && data.qualities;
+    if (!quals) return null;
+
+    for (const ql of ["1080", "720", "480", "380", "240"]) {
+      const arr = quals[ql] || [];
+      const mp4 = arr.find(x => x && x.type === "video/mp4" && x.url);
+      if (mp4) return { url: mp4.url, quality: ql + "p" };
+    }
+
+    const auto = quals.auto || [];
+    const hls = auto.find(x => x && x.url);
+    if (hls) return { url: hls.url, quality: "auto" };
+
+    return null;
+  } catch (_) {
+    return null;
+  }
+}
+
 async function ptSearch(query, limit) {
   const data = await getJson(
     "https://peertube.tv/api/v1/search/videos?search=" + q(query) +
@@ -131,9 +160,20 @@ async function catalog(type, search) {
 async function streamFor(id, type, season, episode) {
   if (String(id).indexOf("dm:") === 0) {
     const vid = String(id).slice(3);
+    const resolved = await dmResolve(vid);
+    if (resolved && resolved.url) {
+      return {
+        streams: [{
+          name: "VN Global Video • Dailymotion",
+          title: "Dailymotion • " + resolved.quality,
+          url: resolved.url,
+          behaviorHints: { notWebReady: true }
+        }]
+      };
+    }
     return {
       streams: [{
-        name: "VN Global Video",
+        name: "VN Global Video • Dailymotion",
         title: "Dailymotion Official Player",
         externalUrl: "https://geo.dailymotion.com/player.html?video=" + q(vid)
       }]
@@ -212,11 +252,21 @@ async function streamFor(id, type, season, episode) {
 
   for (const id of Object.keys(dmMap)) {
     const v = dmMap[id];
-    streams.push({
-      name: "VN Global Video • Dailymotion",
-      title: (v.title || "Dailymotion") + " • Official Player",
-      externalUrl: "https://geo.dailymotion.com/player.html?video=" + q(v.id)
-    });
+    const resolved = await dmResolve(v.id);
+    if (resolved && resolved.url) {
+      streams.push({
+        name: "VN Global Video • Dailymotion",
+        title: (v.title || "Dailymotion") + " • " + resolved.quality,
+        url: resolved.url,
+        behaviorHints: { notWebReady: true }
+      });
+    } else {
+      streams.push({
+        name: "VN Global Video • Dailymotion",
+        title: (v.title || "Dailymotion") + " • Official Player",
+        externalUrl: "https://geo.dailymotion.com/player.html?video=" + q(v.id)
+      });
+    }
   }
 
   for (const id of Object.keys(ptMap)) {
