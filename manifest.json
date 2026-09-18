@@ -1,8 +1,8 @@
 {
   "id": "vn-global-video",
-  "version": "2.7.0",
+  "version": "2.8.0",
   "name": "VN Global Video",
-  "description": "Global public and authorized video discovery addon with multi-source episode fallback.",
+  "description": "Global public and authorized video discovery addon with series episode support.",
   "logo": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/assets/logo.png",
   "resources": [
     {
