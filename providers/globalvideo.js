@@ -133,13 +133,20 @@ function match(target, candidate) {
 
 /* DAILYMOTION — isolated adapter */
 function dailymotion(target) {
+  var s = settings();
+  var token = txt(s.dailymotionAccessToken);
+
+  if (!token) {
+    return Promise.resolve([]);
+  }
+
   var q = target.type === "tv"
     ? target.title + " S" + target.season + "E" + target.episode
     : target.title;
 
   return fetchJson(
     "https://api.dailymotion.com/videos?search=" +
-    enc(q) + "&fields=id,title&limit=5"
+    enc(q) + "&fields=id,title,status&limit=8"
   ).then(function (data) {
     var list = data && data.list ? data.list : [];
     var jobs = [];
@@ -147,25 +154,42 @@ function dailymotion(target) {
     for (var i = 0; i < list.length; i++) {
       (function (item) {
         if (!item || !item.id || !match(target, item.title || "")) return;
+        if (item.status && item.status !== "published") return;
 
         jobs.push(
-          fetchJson(
-            "https://www.dailymotion.com/player/metadata/video/" +
-            enc(item.id)
-          ).then(function (meta) {
-            var q = meta && meta.qualities;
-            var auto = q && q.auto;
-            if (!auto || !auto.length) return [];
+          fetch(
+            "https://api.dailymotion.com/v2/videos/" +
+            enc(item.id) + "/streams",
+            {
+              method: "POST",
+              headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+              },
+              body: JSON.stringify({ protocol: "hls" })
+            }
+          ).then(function (r) {
+            if (!r.ok) throw new Error("Dailymotion streams HTTP " + r.status);
+            return r.json();
+          }).then(function (meta) {
+            var urls = meta && meta.stream_urls ? meta.stream_urls : [];
+            var out = [];
 
-            var url = auto[0] && auto[0].url;
-            if (!direct(url)) return [];
+            for (var u = 0; u < urls.length; u++) {
+              var url = urls[u] && urls[u].stream_url;
+              if (direct(url)) {
+                out.push(stream(
+                  url,
+                  (item.title || "Dailymotion") + " [HLS]",
+                  "Auto",
+                  "m3u8"
+                ));
+                break;
+              }
+            }
 
-            return [stream(
-              url,
-              (item.title || "Dailymotion") + " [HLS]",
-              "Auto",
-              "m3u8"
-            )];
+            return out;
           }).catch(function () {
             return [];
           })
@@ -286,6 +310,18 @@ function onSettings() {
       label: "TMDB API Key",
       placeholder: "Paste TMDB API key",
       description: "Required for movie and TV metadata.",
+      isPassword: true
+    },
+    {
+      type: "info",
+      label: "Optional: Dailymotion direct streams require your authorized Dailymotion access token."
+    },
+    {
+      type: "text",
+      key: "dailymotionAccessToken",
+      label: "Dailymotion Access Token",
+      placeholder: "Paste authorized access token",
+      description: "Used only for Dailymotion's official stream URL API.",
       isPassword: true
     }
   ];
