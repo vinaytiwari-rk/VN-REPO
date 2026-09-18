@@ -242,6 +242,16 @@ async function streamFor(id, type, season, episode) {
     } catch (_) {}
   }
 
+  // Official web fallback for short-drama series.
+  if (type === "series" && title) {
+    const official = "https://www.reelshort.com/search?keywords=" + q(title + " episode " + e);
+    streams.push({
+      name: "VN Global Video • Official Web",
+      title: title + " Episode " + e + " • Official Web Search",
+      externalUrl: official
+    });
+  }
+
   const seen = {};
   return { streams: streams.filter(s => {
     const k = s.url || s.externalUrl;
