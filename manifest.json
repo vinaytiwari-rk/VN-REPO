@@ -1,6 +1,6 @@
 {
   "id": "vn-global-video",
-  "version": "2.4.3",
+  "version": "2.5.0",
   "name": "VN Global Video",
   "description": "Global public and authorized video discovery addon with multi-source episode fallback.",
   "logo": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/assets/logo.png",
@@ -16,14 +16,16 @@
       "name": "meta",
       "types": [
         "movie",
-        "series"
+        "series",
+        "tv"
       ]
     },
     {
       "name": "stream",
       "types": [
         "movie",
-        "series"
+        "series",
+        "tv"
       ],
       "idPrefixes": [
         "tt",
@@ -34,7 +36,8 @@
   ],
   "types": [
     "movie",
-    "series"
+    "series",
+    "tv"
   ],
   "catalogs": [
     {
