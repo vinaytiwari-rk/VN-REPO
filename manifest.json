@@ -1,24 +1,44 @@
 {
   "id": "vn-global-video",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "name": "VN Global Video",
-  "description": "Global public and authorized video discovery addon for Nuvio/Stremio-compatible clients.",
+  "description": "Global public and authorized video discovery addon with multi-source episode fallback.",
   "logo": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/assets/logo.png",
-  "resources": ["catalog", "meta", "stream"],
-  "types": ["movie", "series"],
-  "idPrefixes": ["tmdb:", "tt"],
+  "resources": [
+    "catalog",
+    "meta",
+    "stream"
+  ],
+  "types": [
+    "movie",
+    "series"
+  ],
+  "idPrefixes": [
+    "tmdb:",
+    "tt"
+  ],
   "catalogs": [
     {
       "type": "movie",
       "id": "vn-global",
       "name": "VN Global Video",
-      "extra": [{ "name": "search", "isRequired": false }]
+      "extra": [
+        {
+          "name": "search",
+          "isRequired": false
+        }
+      ]
     },
     {
       "type": "series",
       "id": "vn-global",
       "name": "VN Global Video",
-      "extra": [{ "name": "search", "isRequired": false }]
+      "extra": [
+        {
+          "name": "search",
+          "isRequired": false
+        }
+      ]
     }
   ]
 }
