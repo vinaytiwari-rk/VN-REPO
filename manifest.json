@@ -1,12 +1,12 @@
 {
   "name": "VN Nuvio Repository",
-  "version": "1.6.3",
+  "version": "1.7.0",
   "scrapers": [
     {
       "id": "globalvideo",
       "name": "VN Global Video",
-      "description": "Global public-video provider with direct playable public video sources.",
-      "version": "1.6.3",
+      "description": "Global public video provider streaming from Dailymotion, Internet Archive, and Wikimedia Commons.",
+      "version": "1.7.0",
       "author": "Vinay Tiwari",
       "supportedTypes": [
         "movie",

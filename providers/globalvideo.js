@@ -2,9 +2,9 @@
  * VN Global Video Provider
  * Provider ID: globalvideo
  * Author: Vinay Tiwari
- * Version: 1.6.3
+ * Version: 1.7.0
  * 
- * Multi-Source Public Video Provider (Internet Archive, Wikimedia Commons, Public Media Archives)
+ * Multi-Source Public Video Streaming (Dailymotion, Internet Archive, Wikimedia Commons)
  * Optimized for Nuvio Android (Hermes / QuickJS runtime)
  */
 
@@ -427,6 +427,71 @@ function getQualityWeight(quality) {
   }
 }
 
+/* ---------------------- ADAPTER: DAILYMOTION ---------------------- */
+
+function searchDailymotion(target) {
+  var query = "";
+  if (target.mediaType === "movie") {
+    query = target.title;
+  } else {
+    query = target.seriesName + " S" + pad2(target.season) + "E" + pad2(target.episode);
+  }
+
+  var searchUrl = "https://api.dailymotion.com/videos?search=" + encodeURIComponent(query) + "&fields=id,title,duration&limit=4";
+
+  return fetchJson(searchUrl, {}, 5000)
+    .then(function (data) {
+      if (!data || !data.list || !Array.isArray(data.list) || data.list.length === 0) {
+        return [];
+      }
+
+      var items = data.list;
+      var metaPromises = [];
+
+      for (var i = 0; i < items.length; i++) {
+        (function (item) {
+          var metaUrl = "https://www.dailymotion.com/player/metadata/video/" + encodeURIComponent(item.id);
+          var p = fetchJson(metaUrl, {}, 4500)
+            .then(function (meta) {
+              if (meta && meta.qualities && meta.qualities.auto && meta.qualities.auto[0] && meta.qualities.auto[0].url) {
+                var hlsUrl = meta.qualities.auto[0].url;
+                var score = calculateRelevanceScore(target, item.title || "", "") + 10;
+                return [{
+                  name: PROVIDER_NAME,
+                  title: (item.title || "Dailymotion Stream") + " [HLS]",
+                  url: hlsUrl,
+                  quality: "1080p",
+                  provider: PROVIDER_ID,
+                  format: "m3u8",
+                  score: score
+                }];
+              }
+              return [];
+            })
+            .catch(function () {
+              return [];
+            });
+
+          metaPromises.push(p);
+        })(items[i]);
+      }
+
+      return Promise.all(metaPromises).then(function (results) {
+        var allDm = [];
+        for (var r = 0; r < results.length; r++) {
+          var list = results[r];
+          for (var k = 0; k < list.length; k++) {
+            allDm.push(list[k]);
+          }
+        }
+        return allDm;
+      });
+    })
+    .catch(function () {
+      return [];
+    });
+}
+
 /* ---------------------- ADAPTER: INTERNET ARCHIVE ---------------------- */
 
 function searchInternetArchive(target) {
@@ -650,6 +715,7 @@ function getStreams(tmdbId, mediaType, season, episode) {
       console.log("[" + PROVIDER_NAME + "] sources started for " + (target.title || target.seriesName));
 
       return Promise.all([
+        searchDailymotion(target).catch(function () { return []; }),
         searchInternetArchive(target).catch(function () { return []; }),
         searchWikimediaCommons(target).catch(function () { return []; })
       ]);
@@ -689,15 +755,15 @@ function getStreams(tmdbId, mediaType, season, episode) {
         if (qDiff !== 0) return qDiff;
 
         var fmtWeight = function (f) {
-          if (f === "mp4") return 4;
-          if (f === "m3u8") return 3;
+          if (f === "m3u8") return 4;
+          if (f === "mp4") return 3;
           if (f === "webm") return 2;
           return 1;
         };
         return fmtWeight(b.format) - fmtWeight(a.format);
       });
 
-      var topResults = uniqueStreams.slice(0, 5);
+      var topResults = uniqueStreams.slice(0, 6);
 
       var finalStreams = [];
       for (var n = 0; n < topResults.length; n++) {
