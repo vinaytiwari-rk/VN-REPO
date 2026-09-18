@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "rewrites": [
+    { "source": "/manifest.json", "destination": "/api" },
+    { "source": "/manifest", "destination": "/api" },
+    { "source": "/catalog/:path*", "destination": "/api" },
+    { "source": "/meta/:path*", "destination": "/api" },
+    { "source": "/stream/:path*", "destination": "/api" }
+  ]
+}
