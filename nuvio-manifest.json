@@ -1,0 +1,17 @@
+[
+  {
+    "id": "vn-altarboy",
+    "name": "VN Altarboy 2026",
+    "description": "Official ReelShort Altarboy 2026 provider.",
+    "version": "1.0.0",
+    "author": "VN",
+    "supportedTypes": ["tv"],
+    "filename": "providers/altarboy.js",
+    "enabled": true,
+    "contentLanguage": ["en"],
+    "formats": [],
+    "limited": true,
+    "disabledPlatforms": [],
+    "supportsExternalPlayer": true
+  }
+]
