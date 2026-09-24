@@ -1,7 +1,7 @@
 {
   "name": "VN Ultra All-in-One Repo",
-  "version": "3.7.0",
-  "description": "Public-source Nuvio providers. Legacy embed-only providers disabled pending real playable-stream verification.",
+  "version": "3.7.1",
+  "description": "Playable URL only: PeerTube public HLS/MP4 and openly licensed Internet Archive MP4; unverified embed providers disabled.",
   "scrapers": [
     {
       "id": "vn-ultra-fast",
@@ -121,7 +121,7 @@
     {
       "id": "vn-dailymotion-public",
       "name": "VN Dailymotion Public",
-      "description": "Public video discovery; official Dailymotion player.",
+      "description": "Official player page is not a direct Nuvio playable URL; disabled pending compatible authorized stream integration.",
       "version": "1.0.0",
       "author": "VN",
       "supportedTypes": [
@@ -129,7 +129,7 @@
         "tv"
       ],
       "filename": "providers/dailymotion.js",
-      "enabled": true,
+      "enabled": false,
       "formats": [],
       "contentLanguage": [
         "en"
@@ -159,7 +159,7 @@
     {
       "id": "vn-internetarchive-public",
       "name": "VN Internet Archive Public",
-      "description": "Public archive item discovery; opens archive page.",
+      "description": "Direct MP4 from Archive items with explicit open licenses when available.",
       "version": "1.0.0",
       "author": "VN",
       "supportedTypes": [
@@ -167,11 +167,12 @@
       ],
       "filename": "providers/internetarchive.js",
       "enabled": true,
-      "formats": [],
+      "formats": [
+        "mp4"
+      ],
       "contentLanguage": [
         "en"
-      ],
-      "supportsExternalPlayer": true
+      ]
     }
   ]
 }
