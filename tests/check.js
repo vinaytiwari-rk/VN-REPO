@@ -4,6 +4,14 @@ const assert = require("assert");
 
 const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
 assert(manifest.name && manifest.version && Array.isArray(manifest.scrapers));
+const v5=JSON.parse(fs.readFileSync("v5/manifest.json","utf8"));
+assert.strictEqual(v5.version,"5.0.0");
+assert.strictEqual(v5.scrapers.length,manifest.scrapers.length,"v5 manifest provider count differs");
+for(let i=0;i<v5.scrapers.length;i++){
+  assert.strictEqual(v5.scrapers[i].id,manifest.scrapers[i].id,"v5 provider ID mismatch");
+  assert.strictEqual(v5.scrapers[i].enabled,manifest.scrapers[i].enabled,"v5 provider enabled mismatch");
+  assert.strictEqual(v5.scrapers[i].filename,"https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/"+manifest.scrapers[i].filename,"v5 absolute provider URL mismatch");
+}
 const ids = new Set();
 const providerNames = new Set();
 for (const item of manifest.scrapers) {
