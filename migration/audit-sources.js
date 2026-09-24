@@ -34,7 +34,7 @@ async function main(){
             item.treeTruncated=!!tree.data.truncated;
             item.kotlinFiles=tree.data.tree.filter(f=>f.type==="blob"&&f.path.endsWith(".kt")).map(f=>f.path);
             item.kotlinFileCount=item.kotlinFiles.length;
-            item.providerCandidates=item.kotlinFiles.filter(p=>/(Provider|Extractor|Plugin)\\.kt$/.test(p));
+            item.providerCandidates=item.kotlinFiles.filter(p=>["Provider.kt","Extractor.kt","Plugin.kt"].some(s=>p.endsWith(s)));
             item.moduleCandidates=Array.from(new Set(item.kotlinFiles.map(p=>p.split("/")[0]))).slice(0,100);
           }
         }
