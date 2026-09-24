@@ -1,5 +1,9 @@
 name: VN Live Media Smoke (not device playback)
 on:
+  push:
+    paths:
+      - 'tests/live-check.js'
+      - '.github/workflows/live-media-smoke.yml'
   workflow_dispatch:
   schedule:
     - cron: '43 4 * * 2'
@@ -18,9 +22,12 @@ jobs:
           TMDB_TEST_IDS: '550'
           MAX_STREAMS: '3'
           TIMEOUT_MS: '12000'
+        continue-on-error: true
+      - run: MANIFEST_PATH=nuvio/manifest.json REPORT_PATH=migration/reports/nuvio-live-smoke.json node tests/live-check.js
+        continue-on-error: true
       - if: always()
         uses: actions/upload-artifact@v4
         with:
           name: live-media-smoke-report
-          path: migration/reports/live-smoke.json
+          path: migration/reports/
           if-no-files-found: warn
