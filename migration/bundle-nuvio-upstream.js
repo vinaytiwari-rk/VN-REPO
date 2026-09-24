@@ -47,11 +47,15 @@ async function main(){
   }
   notices.push(src.repo+" ("+count+" provider files, GPL-3.0): https://github.com/"+src.repo);
  }
- const manifest={...base,version:"4.0.1",description:"VN and bundled GPL-3.0 upstream Nuvio JavaScript providers. Upstream enabled does not guarantee playback.",scrapers:[...local,...added]};
+ const manifest={...base,version:"5.0.0",name:"VN Ultra v5 - Clean Providers",description:"VN and bundled GPL-3.0 upstream Nuvio JavaScript providers. Upstream enabled does not guarantee playback.",scrapers:[...local,...added]};
  const ids=manifest.scrapers.map(p=>p.id);
  if(ids.length!==new Set(ids).size)throw Error("Duplicate provider IDs");
  for(const p of manifest.scrapers)if(!fs.existsSync(p.filename))throw Error("Missing provider "+p.filename);
  fs.writeFileSync("manifest.json",JSON.stringify(manifest,null,2)+"\n");
+ const rawBase="https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/";
+ const cleanV5={...manifest,scrapers:manifest.scrapers.map(p=>({...p,filename:rawBase+p.filename}))};
+ fs.mkdirSync("v5",{recursive:true});
+ fs.writeFileSync("v5/manifest.json",JSON.stringify(cleanV5,null,2)+"\n");
  fs.writeFileSync("upstream/NOTICE.md","# Bundled upstream provider code\n\n"+notices.join("\n")+"\n\nEach upstream LICENSE is included in its directory. Provider code is third-party and is not independently playback-verified. Use only content you are authorized to access.\n");
  console.log("Bundled",added.length,"upstream entries;",manifest.scrapers.length,"total; skipped duplicate names:",skippedDuplicates);
 }
