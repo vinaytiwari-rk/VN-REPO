@@ -1,0 +1,26 @@
+name: VN Live Media Smoke (not device playback)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '43 4 * * 2'
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node tests/check.js
+      - run: node tests/live-check.js
+        env:
+          TMDB_TEST_IDS: '550'
+          MAX_STREAMS: '3'
+          TIMEOUT_MS: '12000'
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-media-smoke-report
+          path: migration/reports/live-smoke.json
+          if-no-files-found: warn
