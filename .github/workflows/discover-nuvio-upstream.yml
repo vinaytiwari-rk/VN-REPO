@@ -1,0 +1,26 @@
+name: Discover upstream Nuvio provider repositories
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '13 5 * * 1'
+  push:
+    paths:
+      - 'migration/discover-nuvio-upstream.js'
+      - '.github/workflows/discover-nuvio-upstream.yml'
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check migration/discover-nuvio-upstream.js
+      - run: node migration/discover-nuvio-upstream.js
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuvio-upstream-discovery
+          path: migration/reports/nuvio-upstream-discovery.json
