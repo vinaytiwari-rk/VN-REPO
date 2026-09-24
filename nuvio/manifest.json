@@ -7,49 +7,104 @@
     {
       "id": "vn-dailymotion",
       "name": "VN Dailymotion",
-      "description": "Searches public Dailymotion videos and opens them through the official player.",
+      "description": "Searches public Dailymotion videos and opens them through the official player. Disabled: returns external pages, not verified direct media.",
       "version": "1.0.0",
       "filename": "providers/dailymotion.js",
-      "supportedTypes": ["movie", "tv"],
-      "enabled": true,
-      "contentLanguage": ["en"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "enabled": false,
+      "contentLanguage": [
+        "en"
+      ],
       "formats": [],
       "supportsExternalPlayer": true
     },
     {
       "id": "vn-peertube",
       "name": "VN PeerTube",
-      "description": "Searches public PeerTube videos and returns public HLS/MP4 sources.",
+      "description": "Direct PeerTube HLS/MP4 candidate URLs; HTTP and device playback not yet verified.",
       "version": "1.0.0",
       "filename": "providers/peertube.js",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "enabled": true,
-      "contentLanguage": ["en"],
-      "formats": ["m3u8", "mp4"]
+      "contentLanguage": [
+        "en"
+      ],
+      "formats": [
+        "m3u8",
+        "mp4"
+      ]
     },
     {
       "id": "vn-internet-archive",
       "name": "VN Internet Archive",
-      "description": "Searches Internet Archive public items and opens matching archive pages.",
+      "description": "Searches Internet Archive public items and opens matching archive pages. Disabled: returns external pages, not verified direct media.",
       "version": "1.0.0",
       "filename": "providers/internetarchive.js",
-      "supportedTypes": ["movie"],
-      "enabled": true,
-      "contentLanguage": ["en"],
+      "supportedTypes": [
+        "movie"
+      ],
+      "enabled": false,
+      "contentLanguage": [
+        "en"
+      ],
       "formats": [],
       "supportsExternalPlayer": true
     },
     {
       "id": "vn-altarboy",
       "name": "VN Altarboy 2026",
-      "description": "Official ReelShort Altarboy 2026 provider.",
+      "description": "Official ReelShort Altarboy 2026 provider. Disabled: returns external pages, not verified direct media.",
       "version": "1.2.0",
       "filename": "providers/altarboy.js",
-      "supportedTypes": ["tv"],
-      "enabled": true,
-      "contentLanguage": ["en"],
+      "supportedTypes": [
+        "tv"
+      ],
+      "enabled": false,
+      "contentLanguage": [
+        "en"
+      ],
       "formats": [],
       "supportsExternalPlayer": true
+    },
+    {
+      "id": "vn-archive-direct",
+      "name": "VN Internet Archive Open-Licensed MP4",
+      "description": "Direct MP4 candidates from items with an explicit open license; playback not yet verified.",
+      "version": "1.0.0",
+      "filename": "providers/archive-direct.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "enabled": true,
+      "contentLanguage": [
+        "en"
+      ],
+      "formats": [
+        "mp4"
+      ]
+    },
+    {
+      "id": "vn-commons-direct",
+      "name": "VN Wikimedia Commons Open-Licensed MP4",
+      "description": "Direct MP4 candidates with supported open licenses; playback not yet verified.",
+      "version": "1.0.0",
+      "filename": "providers/commons-direct.js",
+      "supportedTypes": [
+        "movie"
+      ],
+      "enabled": true,
+      "contentLanguage": [
+        "en"
+      ],
+      "formats": [
+        "mp4"
+      ]
     }
   ]
 }

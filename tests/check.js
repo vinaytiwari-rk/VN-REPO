@@ -36,6 +36,25 @@ async function check() {
     assert(streams.length > 0,p.id+" mock fixture returned no streams");
     console.log("PASS",p.id,streams.length,"mock results");
   }
+  const nuvio = JSON.parse(fs.readFileSync("nuvio/manifest.json","utf8"));
+  const nuvioIds = new Set();
+  for (const p of nuvio.scrapers) {
+    assert(p.id && !nuvioIds.has(p.id), "Duplicate Nuvio provider ID");
+    nuvioIds.add(p.id);
+    const path = "nuvio/" + p.filename;
+    assert(fs.existsSync(path), "Missing Nuvio provider: " + path);
+    new vm.Script(fs.readFileSync(path,"utf8"),{filename:path});
+    if (!p.enabled) continue;
+    assert(Array.isArray(p.formats) && p.formats.length>0,"Enabled Nuvio provider needs direct media formats: "+p.id);
+    const ctx={module:{exports:{}},fetch:mockFetch,console,Promise,encodeURIComponent};
+    vm.runInNewContext(fs.readFileSync(path,"utf8"),ctx,{filename:path});
+    assert.strictEqual(typeof ctx.module.exports.getStreams,"function",p.id);
+    const streams=await ctx.module.exports.getStreams("550","movie");
+    assert(Array.isArray(streams),p.id+" must return array");
+    for(const s of streams)assert(s.url && String(s.url).startsWith("https://") && !s.externalUrl,p.id+" must return direct HTTPS media candidates");
+    assert(streams.length>0,p.id+" returned no mocked media");
+    console.log("PASS Nuvio",p.id,streams.length,"mock candidates");
+  }
   console.log("PASS manifest + all provider JavaScript files; mocked provider contracts (not live playback)");
 }
 check().catch(e=>{console.error(e);process.exit(1)});

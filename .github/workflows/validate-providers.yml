@@ -4,6 +4,7 @@ on:
     paths:
       - 'manifest.json'
       - 'providers/**'
+      - 'nuvio/**'
       - 'tests/**'
       - '.github/workflows/validate-providers.yml'
   workflow_dispatch:
