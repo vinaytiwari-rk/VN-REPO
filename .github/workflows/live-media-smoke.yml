@@ -1,5 +1,9 @@
 name: VN Live Media Smoke (not device playback)
 on:
+  push:
+    paths:
+      - 'tests/live-check.js'
+      - '.github/workflows/live-media-smoke.yml'
   workflow_dispatch:
   schedule:
     - cron: '43 4 * * 2'
