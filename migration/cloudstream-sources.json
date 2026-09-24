@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "description": "User-supplied upstream CloudStream repositories. Discovery inventory only; not installed or converted Nuvio providers.",
+  "sources": [
+    {
+      "url": "https://github.com/dipender98/Indflix/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/recloudstream/extensions",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/self-similarity/MegaRepo/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/SaurabhKaperwan/CSX/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Abodabodd/re-3arabi/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/TeKuma25/IndoStream",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Asm0d3usX/CloudX",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/doGior/doGiorsHadEnough",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/DieGon7771/ItaliaInStreaming",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Kraptor123/Cs-Karma",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://codeberg.org/CakesTwix/cloudstream-extensions-uk/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Gian-Fr/ItalianProvider/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Reflex755/ReflexRepo",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/redowan99/Redowan-CloudStream/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Bnyro/GermanProviders/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Luna712/Luna712-CloudStream-Extensions/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/lawlietbr/lietrepo",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/phisher98/cloudstream-extensions-phisher",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/NivinCNC/CNCVerse-Cloud-Stream-Extension",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/saimuelbr/saimuelrepo/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://gitlab.com/tearrs/cloudstream-vietnamese/-/tree/code",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/phisher98/CXXX",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Kraptor123/Cs-GizliKeyif",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://codeberg.org/cloudstream/cloudstream-extensions-hexated/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Rowdy-Avocado/Rowdycado-Extensions/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://codeberg.org/cloudstream/cloudstream-extensions-multilingual",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://keyiflerolsun.me/Kekik-cloudstream/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/keyiflerolsun/Kekik-cloudstream/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/sarapcanagii/Pitipitii",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/Kraptor123/cs-kraptor/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/aymanbest/Arabico/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://codeberg.org/cloudstream/cs3xxx-repo/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://codeberg.org/cloudstream/likdev256-tamil-providers/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/CranberrySoup/AniyomiCompatExtension/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://codeberg.org/cloudstream/cloudstream-extensions/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://codeberg.org/IndusAryan/AR",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/KingLucius/cs-extensions",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    },
+    {
+      "url": "https://github.com/techtanic/SkillShare-Repo/",
+      "portStatus": "not_started",
+      "verifiedPlayable": false
+    }
+  ]
+}
