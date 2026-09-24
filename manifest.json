@@ -1,7 +1,7 @@
 {
   "name": "VN Ultra v5 - Clean Providers",
   "version": "5.0.0",
-  "description": "Fresh URL v5 with deduplicated Nuvio provider names; actual playback varies by source.",
+  "description": "VN and bundled GPL-3.0 upstream Nuvio JavaScript providers. Upstream enabled does not guarantee playback.",
   "scrapers": [
     {
       "id": "vn-ultra-fast",
