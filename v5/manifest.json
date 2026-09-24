@@ -13,7 +13,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/vn_stream.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/vn_stream.js",
       "enabled": false,
       "formats": [],
       "contentLanguage": [
@@ -31,7 +31,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/vn_hindi.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/vn_hindi.js",
       "enabled": false,
       "formats": [],
       "contentLanguage": [
@@ -49,7 +49,7 @@
       "supportedTypes": [
         "tv"
       ],
-      "filename": "providers/vn_series.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/vn_series.js",
       "enabled": false,
       "formats": [],
       "contentLanguage": [
@@ -68,7 +68,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/vn_multi.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/vn_multi.js",
       "enabled": false,
       "formats": [],
       "contentLanguage": [
@@ -89,7 +89,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/vn_anime.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/vn_anime.js",
       "enabled": false,
       "formats": [],
       "contentLanguage": [
@@ -109,7 +109,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/vn_backup.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/vn_backup.js",
       "enabled": false,
       "formats": [],
       "contentLanguage": [
@@ -128,7 +128,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/dailymotion.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/dailymotion.js",
       "enabled": false,
       "formats": [],
       "contentLanguage": [
@@ -146,7 +146,7 @@
         "movie",
         "tv"
       ],
-      "filename": "providers/peertube.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/peertube.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -165,7 +165,7 @@
       "supportedTypes": [
         "movie"
       ],
-      "filename": "providers/internetarchive.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/internetarchive.js",
       "enabled": true,
       "formats": [
         "mp4"
@@ -183,7 +183,7 @@
       "supportedTypes": [
         "movie"
       ],
-      "filename": "providers/wikimedia.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/providers/wikimedia.js",
       "enabled": true,
       "formats": [
         "mp4"
@@ -202,7 +202,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/4khdhub.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/4khdhub.js",
       "enabled": true,
       "formats": [
         "mkv"
@@ -224,7 +224,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/animepahe.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/animepahe.js",
       "enabled": true,
       "hasSettings": true,
       "formats": [
@@ -247,7 +247,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/uhdmovies.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/uhdmovies.js",
       "enabled": true,
       "formats": [
         "mkv"
@@ -269,7 +269,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/moviesmod.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/moviesmod.js",
       "enabled": true,
       "formats": [
         "mkv"
@@ -291,7 +291,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/dahmermovies.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/dahmermovies.js",
       "enabled": true,
       "hasSettings": true,
       "formats": [
@@ -314,7 +314,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/netmirror.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/netmirror.js",
       "enabled": true,
       "hasSettings": true,
       "logo": "https://net22.cc/favicon.ico",
@@ -338,7 +338,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/streamflix.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/streamflix.js",
       "enabled": true,
       "formats": [
         "mkv"
@@ -361,7 +361,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/moviebox.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/moviebox.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -387,7 +387,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/vixsrc.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/vixsrc.js",
       "enabled": true,
       "logo": "https://vixsrc.to/favicon.ico",
       "contentLanguage": [
@@ -406,7 +406,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/dvdplay.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/dvdplay.js",
       "enabled": true,
       "formats": [
         "mkv"
@@ -430,7 +430,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/yflix.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/yflix.js",
       "enabled": true,
       "limited": true,
       "formats": [
@@ -454,7 +454,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/videasy.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/videasy.js",
       "enabled": false,
       "limited": true,
       "formats": [
@@ -484,7 +484,7 @@
       "supportedTypes": [
         "movie"
       ],
-      "filename": "upstream/yoru/providers/mallumv.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/mallumv.js",
       "enabled": true,
       "formats": [
         "mkv",
@@ -511,7 +511,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/vidlink.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/vidlink.js",
       "enabled": true,
       "formats": [
         "m3u8",
@@ -534,7 +534,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/vidnest.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/vidnest.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -557,7 +557,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/vidnest-anime.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/vidnest-anime.js",
       "enabled": true,
       "formats": [
         "m3u8"
@@ -582,7 +582,7 @@
       "supportedTypes": [
         "movie"
       ],
-      "filename": "upstream/yoru/providers/cinevibe.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/cinevibe.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -605,7 +605,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/cinemacity.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/cinemacity.js",
       "enabled": true,
       "formats": [
         "mp4"
@@ -633,7 +633,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/castle.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/castle.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -661,7 +661,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/showbox.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/showbox.js",
       "enabled": true,
       "hasSettings": true,
       "formats": [
@@ -685,7 +685,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/hdhub4u.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/hdhub4u.js",
       "enabled": true,
       "formats": [
         "mkv",
@@ -709,7 +709,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/allmovieland.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/allmovieland.js",
       "enabled": true,
       "formats": [
         "m3u8"
@@ -734,7 +734,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/dooflix.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/dooflix.js",
       "enabled": true,
       "formats": [
         "m3u8"
@@ -757,7 +757,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/movieblast.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/movieblast.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -782,7 +782,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/mycima.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/mycima.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -805,7 +805,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/moviesdrive.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/moviesdrive.js",
       "enabled": true,
       "formats": [
         "mkv",
@@ -829,7 +829,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/hianime.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/hianime.js",
       "enabled": true,
       "hasSettings": true,
       "formats": [
@@ -852,7 +852,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/kurage.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/kurage.js",
       "enabled": true,
       "formats": [
         "mp4"
@@ -874,7 +874,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/yoru/providers/anizone.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/yoru/providers/anizone.js",
       "enabled": true,
       "formats": [
         "m3u8"
@@ -896,7 +896,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/tapframe/providers/vidsrc.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/tapframe/providers/vidsrc.js",
       "enabled": true,
       "logo": "https://vsembed.ru/template/vidsrc-ico.png",
       "contentLanguage": [
@@ -914,7 +914,7 @@
       "supportedTypes": [
         "tv"
       ],
-      "filename": "upstream/tapframe/providers/animekai.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/tapframe/providers/animekai.js",
       "enabled": true,
       "limited": true,
       "logo": "https://animekai.to/assets/uploads/37585a39fe8c8d8fafaa2c7bfbf5374ecac859ea6a0288a6da2c61f5.png",
@@ -934,7 +934,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/tapframe/providers/hdrezka.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/tapframe/providers/hdrezka.js",
       "enabled": true,
       "logo": "https://hdrezka.ag/templates/hdrezka/images/favicon.ico",
       "contentLanguage": [
@@ -954,7 +954,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/tapframe/providers/watch32.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/tapframe/providers/watch32.js",
       "enabled": false,
       "logo": "https://img.watch32.sx/xxrz/400x400/100/a9/5e/a95e15a880a9df3c045f6a5224daf576/a95e15a880a9df3c045f6a5224daf576.png",
       "contentLanguage": [
@@ -973,7 +973,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/tapframe/providers/vidrock.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/tapframe/providers/vidrock.js",
       "enabled": true,
       "formats": [
         "mp4",
@@ -996,7 +996,7 @@
         "movie",
         "tv"
       ],
-      "filename": "upstream/tapframe/providers/mapple.js",
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/upstream/tapframe/providers/mapple.js",
       "enabled": false,
       "formats": [
         "mp4",
