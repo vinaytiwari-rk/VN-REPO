@@ -46,7 +46,23 @@ async function main(){
           }
         }
       }catch(e){item.error=String(e.message||e);}
-    }else{item.audit="manual review: non-GitHub source";}
+    }else{
+      // Non-GitHub hosts are probed for reachability, never marked compatible.
+      item.audit="non-GitHub reachability only; manual provider review required";
+      try {
+        const result=await new Promise((resolve,reject)=>{
+          const req=https.request(source.url,{method:"HEAD",headers:{"User-Agent":"VN-REPO-source-audit"}},res=>{
+            res.resume();
+            resolve({status:res.statusCode,redirect:res.headers.location||null});
+          });
+          req.setTimeout(8000,()=>req.destroy(Error("timeout")));
+          req.on("error",reject);
+          req.end();
+        });
+        item.httpStatus=result.status;
+        if(result.redirect)item.redirect=result.redirect;
+      }catch(e){item.error=String(e.message||e);}
+    }
     report.push(item);
   }
   fs.mkdirSync("migration/reports",{recursive:true});
