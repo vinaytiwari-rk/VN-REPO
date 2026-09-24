@@ -28,6 +28,15 @@ async function main(){
           item.archived=r.data.archived;
           item.license=r.data.license&&r.data.license.spdx_id||"NOASSERTION";
           item.lastPushed=r.data.pushed_at;
+          const tree=await get("https://api.github.com/repos/"+encodeURIComponent(path[0])+"/"+encodeURIComponent(path[1])+"/git/trees/"+encodeURIComponent(r.data.default_branch)+"?recursive=1");
+          item.treeStatus=tree.status;
+          if(tree.status===200&&tree.data&&Array.isArray(tree.data.tree)){
+            item.treeTruncated=!!tree.data.truncated;
+            item.kotlinFiles=tree.data.tree.filter(f=>f.type==="blob"&&f.path.endsWith(".kt")).map(f=>f.path);
+            item.kotlinFileCount=item.kotlinFiles.length;
+            item.providerCandidates=item.kotlinFiles.filter(p=>/(Provider|Extractor|Plugin)\\.kt$/.test(p));
+            item.moduleCandidates=Array.from(new Set(item.kotlinFiles.map(p=>p.split("/")[0]))).slice(0,100);
+          }
         }
       }catch(e){item.error=String(e.message||e);}
     }else{item.audit="manual review: non-GitHub source";}
