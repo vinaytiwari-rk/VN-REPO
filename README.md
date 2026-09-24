@@ -1,3 +1,11 @@
+## VN Ultra v5: fresh installation URL
+
+If Nuvio still shows v4.0.0 and 65 duplicated providers, delete the old VN repository and install this **different manifest URL** under Plugins:
+
+`https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/v5/manifest.json`
+
+This v5 manifest uses absolute URLs for all provider scripts and has 45 deduplicated providers (35 upstream-enabled at release). The root manifest also reports v5, but reusing its old URL may retain an old cached repository. A successful install does not establish that every provider returns playable streams.
+
 # VN-REPO — Nuvio setup
 
 ## Want a larger movie and TV provider selection?
