@@ -1,84 +1,176 @@
 {
   "name": "VN Ultra All-in-One Repo",
-  "version": "3.6.0",
-  "description": "High-Speed Real Video Providers for Nuvio",
+  "version": "3.7.0",
+  "description": "Public-source Nuvio providers. Legacy embed-only providers disabled pending real playable-stream verification.",
   "scrapers": [
     {
       "id": "vn-ultra-fast",
       "name": "VN Ultra Fast (1080p)",
-      "description": "Ultra fast instant streaming server.",
+      "description": "Legacy embed-page URLs are not verified playable streams; disabled pending authorized media URL implementation.",
       "version": "1.0.0",
       "author": "VN",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/vn_stream.js",
-      "enabled": true,
-      "formats": ["mp4", "m3u8"],
-      "contentLanguage": ["en"],
+      "enabled": false,
+      "formats": [],
+      "contentLanguage": [
+        "en"
+      ],
       "supportsExternalPlayer": true
     },
     {
       "id": "vn-hindi-bolly",
       "name": "VN Bollywood & Hindi Dub",
-      "description": "Hindi Dubbed and Bollywood movie streams.",
+      "description": "Legacy embed-page URLs are not verified playable streams; disabled pending authorized media URL implementation.",
       "version": "1.0.0",
       "author": "VN",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/vn_hindi.js",
-      "enabled": true,
-      "formats": ["mp4", "m3u8"],
-      "contentLanguage": ["hi", "en"],
+      "enabled": false,
+      "formats": [],
+      "contentLanguage": [
+        "hi",
+        "en"
+      ],
       "supportsExternalPlayer": true
     },
     {
       "id": "vn-series-pro",
       "name": "VN TV Series Pro",
-      "description": "All episodes TV shows and web series.",
+      "description": "Legacy embed-page URLs are not verified playable streams; disabled pending authorized media URL implementation.",
       "version": "1.0.0",
       "author": "VN",
-      "supportedTypes": ["tv"],
+      "supportedTypes": [
+        "tv"
+      ],
       "filename": "providers/vn_series.js",
-      "enabled": true,
-      "formats": ["m3u8", "mp4"],
-      "contentLanguage": ["en", "hi"],
+      "enabled": false,
+      "formats": [],
+      "contentLanguage": [
+        "en",
+        "hi"
+      ],
       "supportsExternalPlayer": true
     },
     {
       "id": "vn-multi-lang",
       "name": "VN Multi-Audio (Hindi/South/Eng)",
-      "description": "Multi-language regional audio streams.",
+      "description": "Legacy embed-page URLs are not verified playable streams; disabled pending authorized media URL implementation.",
       "version": "1.0.0",
       "author": "VN",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/vn_multi.js",
-      "enabled": true,
-      "formats": ["mp4", "m3u8"],
-      "contentLanguage": ["hi", "ta", "te", "en"],
+      "enabled": false,
+      "formats": [],
+      "contentLanguage": [
+        "hi",
+        "ta",
+        "te",
+        "en"
+      ],
       "supportsExternalPlayer": true
     },
     {
       "id": "vn-anime-express",
       "name": "VN Anime Express",
-      "description": "Subbed and Dubbed Anime.",
+      "description": "Legacy embed-page URLs are not verified playable streams; disabled pending authorized media URL implementation.",
       "version": "1.0.0",
       "author": "VN",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/vn_anime.js",
-      "enabled": true,
-      "formats": ["m3u8", "mp4"],
-      "contentLanguage": ["ja", "en", "hi"],
+      "enabled": false,
+      "formats": [],
+      "contentLanguage": [
+        "ja",
+        "en",
+        "hi"
+      ],
       "supportsExternalPlayer": true
     },
     {
       "id": "vn-vip-backup",
       "name": "VN Cloud VIP Backup",
-      "description": "Backup stream servers.",
+      "description": "Legacy embed-page URLs are not verified playable streams; disabled pending authorized media URL implementation.",
       "version": "1.0.0",
       "author": "VN",
-      "supportedTypes": ["movie", "tv"],
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
       "filename": "providers/vn_backup.js",
+      "enabled": false,
+      "formats": [],
+      "contentLanguage": [
+        "en",
+        "hi"
+      ],
+      "supportsExternalPlayer": true
+    },
+    {
+      "id": "vn-dailymotion-public",
+      "name": "VN Dailymotion Public",
+      "description": "Public video discovery; official Dailymotion player.",
+      "version": "1.0.0",
+      "author": "VN",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/dailymotion.js",
       "enabled": true,
-      "formats": ["mp4", "m3u8"],
-      "contentLanguage": ["en", "hi"],
+      "formats": [],
+      "contentLanguage": [
+        "en"
+      ],
+      "supportsExternalPlayer": true
+    },
+    {
+      "id": "vn-peertube-public",
+      "name": "VN PeerTube Public",
+      "description": "Public PeerTube HLS/MP4 sources when available.",
+      "version": "1.0.0",
+      "author": "VN",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/peertube.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "contentLanguage": [
+        "en"
+      ]
+    },
+    {
+      "id": "vn-internetarchive-public",
+      "name": "VN Internet Archive Public",
+      "description": "Public archive item discovery; opens archive page.",
+      "version": "1.0.0",
+      "author": "VN",
+      "supportedTypes": [
+        "movie"
+      ],
+      "filename": "providers/internetarchive.js",
+      "enabled": true,
+      "formats": [],
+      "contentLanguage": [
+        "en"
+      ],
       "supportsExternalPlayer": true
     }
   ]
