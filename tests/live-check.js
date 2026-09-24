@@ -21,7 +21,7 @@ async function checkedFetch(url,options={}){
 function plausibleMedia(url,contentType,body){
  const type=String(contentType||"").toLowerCase();
  if(type.includes("video/")||type.includes("application/vnd.apple.mpegurl")||type.includes("application/x-mpegurl"))return true;
- if(type.includes("application/octet-stream")&&/\\.(mp4|m4v|webm)(\\?|$)/i.test(url))return true;
+ if(type.includes("application/octet-stream")&&[".mp4",".m4v",".webm"].some(ext=>new URL(url).pathname.toLowerCase().endsWith(ext)))return true;
  return /^#EXTM3U/.test(body||"")||/^.{0,16}ftyp/s.test(body||"");
 }
 async function probe(url){
