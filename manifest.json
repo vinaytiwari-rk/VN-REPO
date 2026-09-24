@@ -1,7 +1,7 @@
 {
   "name": "VN Ultra All-in-One Repo",
-  "version": "3.7.1",
-  "description": "Playable URL only: PeerTube public HLS/MP4 and openly licensed Internet Archive MP4; unverified embed providers disabled.",
+  "version": "3.8.0",
+  "description": "Nuvio direct media providers: open-licensed Archive, public PeerTube, and open-licensed Wikimedia Commons. Legacy embeds disabled.",
   "scrapers": [
     {
       "id": "vn-ultra-fast",
@@ -166,6 +166,24 @@
         "movie"
       ],
       "filename": "providers/internetarchive.js",
+      "enabled": true,
+      "formats": [
+        "mp4"
+      ],
+      "contentLanguage": [
+        "en"
+      ]
+    },
+    {
+      "id": "vn-wikimedia-commons",
+      "name": "VN Wikimedia Commons Video",
+      "description": "Open-licensed MP4 videos matching film titles; availability is limited.",
+      "version": "1.0.0",
+      "author": "VN",
+      "supportedTypes": [
+        "movie"
+      ],
+      "filename": "providers/wikimedia.js",
       "enabled": true,
       "formats": [
         "mp4"
