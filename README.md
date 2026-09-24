@@ -31,3 +31,16 @@ Enabled: PeerTube public videos, Internet Archive explicitly open-licensed MP4, 
 5. Do not interpret GitHub Actions' mocked API fixtures as a live source or playback test.
 
 See the upstream developer guide: https://github.com/yoruix/nuvio-providers
+
+## Important: native CloudStream extension support on Nuvio Android TV full builds
+
+The NuvioTV **dev** source now includes an `ExternalRepoParser`, `ExternalExtensionLoader`, and `ExternalExtensionRunner` for CloudStream-format `repo.json` and compiled extension packages. On a compatible **Android TV full** build, use its **external/CloudStream repository** feature to add original upstream repository manifests directly, without rewriting every Kotlin provider as JavaScript. Availability in a public release, mobile Android build, and individual extension playback must be checked on the actual installed build. Do **not** paste CloudStream `repo.json` into the Nuvio JavaScript Plugins field.
+
+Verified upstream repo manifests:
+
+- Indflix: https://raw.githubusercontent.com/dipender98/Indflix/main/repo.json
+- Recloudstream extensions: https://raw.githubusercontent.com/recloudstream/extensions/master/repo.json
+
+These are upstream external-extension repositories, **not** VN Nuvio JavaScript plugins. They are not automatically enabled, endorsed, licensed for redistribution, or playback-verified. Some providers require authentication, use unsupported WebView/Android APIs, or serve content without authorization. Only access content you have rights to watch.
+
+NuvioTV implementation: https://github.com/NuvioMedia/NuvioTV/tree/dev/app/src/full/java/com/nuvio/tv/core/plugin/cloudstream
