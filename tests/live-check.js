@@ -26,7 +26,10 @@ async function probe(url){
  try{
   const r=await checkedFetch(url,{headers:{Range:"bytes=0-1023",Accept:"video/*,application/vnd.apple.mpegurl,application/x-mpegurl,*/*"}});
   const type=r.headers.get("content-type")||"";
-  const bytes=await r.arrayBuffer();
+  const reader=r.body&&r.body.getReader();
+  const first=reader?await reader.read():{value:new Uint8Array(),done:true};
+  if(reader)await reader.cancel().catch(()=>{});
+  const bytes=first.value||new Uint8Array();
   const head=Buffer.from(bytes.slice(0,256)).toString("latin1");
   return {ok:r.ok&&plausibleMedia(url,type,head),status:r.status,type,bytes:bytes.byteLength,finalUrl:r.url,reason:r.ok?"media_signature_or_mime":"http_error"};
  }catch(e){return {ok:false,reason:String(e.message||e)};}
