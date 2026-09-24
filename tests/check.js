@@ -21,6 +21,7 @@ async function check() {
       value.includes("dailymotion.com") ? { list: [{id:"x123",title:"Example Movie",status:"published"}] } :
       value.includes("search/videos") ? {data:[{id:"peer1",name:"Example Movie"}]} :
       value.includes("/videos/peer1") ? {streamingPlaylists:[{playlistUrl:"https://example.org/film.m3u8"}],files:[]} :
+      value.includes("archive.org/metadata/") ? {metadata:{licenseurl:"https://creativecommons.org/licenses/by/4.0/"},files:[{name:"film.mp4"}]} :
       {response:{docs:[{identifier:"example-movie",title:"Example Movie"}]}};
     return Promise.resolve({ok:true,text:()=>Promise.resolve(String(body)),json:()=>Promise.resolve(body)});
   };
@@ -30,7 +31,8 @@ async function check() {
     assert.strictEqual(typeof ctx.module.exports.getStreams,"function",p.id);
     const streams = await ctx.module.exports.getStreams("550","movie");
     assert(Array.isArray(streams),p.id+" must return array");
-    for (const s of streams) assert(s.name && s.title && (s.url || s.externalUrl),p.id+" invalid stream");
+    for (const s of streams) assert(s.name && s.title && s.url && /^https:\/\//.test(s.url),p.id+" requires playable URL");
+    assert(streams.length > 0,p.id+" mock fixture returned no streams");
     console.log("PASS",p.id,streams.length,"mock results");
   }
   console.log("PASS manifest + all 9 JavaScript files; mocked provider contracts (not live playback)");
