@@ -8,6 +8,7 @@ function titleFromTmdb(tmdbId, mediaType) {
     }).catch(function(){ return ""; });
 }
 
+function normalizedTitle(value) { return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim(); }
 function getStreams(tmdbId, mediaType, season, episode) {
   return titleFromTmdb(tmdbId, mediaType).then(function(title) {
     if (!title) return [];
@@ -17,7 +18,12 @@ function getStreams(tmdbId, mediaType, season, episode) {
       .then(function(r){ return r.json(); })
       .then(function(data){
         var items = data.data || [];
-        return items.filter(function(v){ return v && v.id && v.name; }).map(function(v){
+        var expected = normalizedTitle(title);
+        return items.filter(function(v){
+          if (!v || !v.id || !v.name) return false;
+          var actual = normalizedTitle(v.name);
+          return expected.length >= 4 && (actual === expected || actual.indexOf(expected + ' ') === 0 || actual.indexOf(' ' + expected + ' ') !== -1 || actual.endsWith(' ' + expected));
+        }).map(function(v){
           return fetch("https://peertube.tv/api/v1/videos/" + encodeURIComponent(v.id))
             .then(function(r){ return r.json(); })
             .then(function(full){
