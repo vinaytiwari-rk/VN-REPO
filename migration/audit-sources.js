@@ -36,6 +36,13 @@ async function main(){
             item.kotlinFileCount=item.kotlinFiles.length;
             item.providerCandidates=item.kotlinFiles.filter(p=>["Provider.kt","Extractor.kt","Plugin.kt"].some(s=>p.endsWith(s)));
             item.moduleCandidates=Array.from(new Set(item.kotlinFiles.map(p=>p.split("/")[0]))).slice(0,100);
+            const root=await get("https://api.github.com/repos/"+encodeURIComponent(path[0])+"/"+encodeURIComponent(path[1])+"/contents/repo.json?ref="+encodeURIComponent(r.data.default_branch));
+            if(root.status===200&&root.data&&root.data.content){
+              try{
+                const repoManifest=JSON.parse(Buffer.from(root.data.content,"base64").toString("utf8"));
+                item.cloudStreamManifest={name:repoManifest.name,pluginLists:repoManifest.pluginLists||[]};
+              }catch(e){item.manifestParseError=String(e.message||e);}
+            }
           }
         }
       }catch(e){item.error=String(e.message||e);}
