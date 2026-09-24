@@ -51,7 +51,7 @@ async function check() {
     assert.strictEqual(typeof ctx.module.exports.getStreams,"function",p.id);
     const streams=await ctx.module.exports.getStreams("550","movie");
     assert(Array.isArray(streams),p.id+" must return array");
-    for(const s of streams)assert(s.url && /^https:\\/\\//.test(s.url) && !s.externalUrl,p.id+" must return direct HTTPS media candidates");
+    for(const s of streams)assert(s.url && String(s.url).startsWith("https://") && !s.externalUrl,p.id+" must return direct HTTPS media candidates");
     assert(streams.length>0,p.id+" returned no mocked media");
     console.log("PASS Nuvio",p.id,streams.length,"mock candidates");
   }
