@@ -1,7 +1,7 @@
 {
   "name": "VN Ultra All-in-One Repo",
-  "version": "3.8.0",
-  "description": "Nuvio direct media providers: open-licensed Archive, public PeerTube, and open-licensed Wikimedia Commons. Legacy embeds disabled.",
+  "version": "4.0.0",
+  "description": "VN and bundled GPL-3.0 upstream Nuvio JavaScript providers. Upstream enabled does not guarantee playback.",
   "scrapers": [
     {
       "id": "vn-ultra-fast",
@@ -191,6 +191,1298 @@
       "contentLanguage": [
         "en"
       ]
+    },
+    {
+      "id": "4khdhub",
+      "name": "4KHDHub",
+      "description": "4KHDHub direct links",
+      "version": "1.0.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/4khdhub.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=4khdhub.click&sz=128",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "4khdhub"
+    },
+    {
+      "id": "animepahe",
+      "name": "AnimePahe",
+      "description": "AnimePahe (Sub/Dub)",
+      "version": "1.0.1",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/animepahe.js",
+      "enabled": true,
+      "hasSettings": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=animepahe.ru&sz=128",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "animepahe"
+    },
+    {
+      "id": "uhdmovies",
+      "name": "UHDMovies",
+      "description": "UHD Movies streaming with multiple resolution",
+      "version": "1.2.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/uhdmovies.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=uhdmovies.pink&sz=128",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "uhdmovies"
+    },
+    {
+      "id": "moviesmod",
+      "name": "MoviesMod",
+      "description": "Movie and TV show streams from MoviesMod with multiple quality options",
+      "version": "1.0.1",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/moviesmod.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=moviesmod.farm&sz=128",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "moviesmod"
+    },
+    {
+      "id": "dahmermovies",
+      "name": "DahmerMovies",
+      "description": "Dahmer Movies streaming service. Can be slow at times to fetch and stream. Only use if needed.",
+      "version": "1.0.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/dahmermovies.js",
+      "enabled": true,
+      "hasSettings": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://image.similarpng.com/file/similarpng/very-thumbnail/2021/05/Letter-D-logo-design-template-with-geometric-shape-style-on-transparent-background-PNG.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "dahmermovies"
+    },
+    {
+      "id": "netmirror",
+      "name": "NetMirror",
+      "description": "Streaming links from netmirror. Automatically disabled on iOS due to compatibility issues.",
+      "version": "1.0.3",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/netmirror.js",
+      "enabled": true,
+      "hasSettings": true,
+      "logo": "https://net22.cc/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "disabledPlatforms": [
+        "ios"
+      ],
+      "supportsExternalPlayer": false,
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "netmirror"
+    },
+    {
+      "id": "streamflix",
+      "name": "StreamFlix",
+      "description": "Direct links via StreamFlix API",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/streamflix.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://streamflix.app/assets/images/logo-text-148x72.png",
+      "contentLanguage": [
+        "en",
+        "hin"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "streamflix"
+    },
+    {
+      "id": "moviebox",
+      "name": "MovieBox",
+      "description": "MovieBox streaming with multiple language support (DASH + MP4)",
+      "version": "1.1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/moviebox.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mpd"
+      ],
+      "logo": "https://moviebox.ph/favicon.ico",
+      "contentLanguage": [
+        "en",
+        "hin",
+        "tam",
+        "tel"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "moviebox"
+    },
+    {
+      "id": "vixsrc",
+      "name": "Vixsrc",
+      "description": "Vixsrc M3U8 streaming with auto quality selection",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/vixsrc.js",
+      "enabled": true,
+      "logo": "https://vixsrc.to/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "vixsrc"
+    },
+    {
+      "id": "dvdplay",
+      "name": "DVDPlay",
+      "description": "DVDPlay direct download links with HubCloud extraction",
+      "version": "1.0.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/dvdplay.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=dvdplay.com&sz=128",
+      "contentLanguage": [
+        "mal",
+        "tam",
+        "hin"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "dvdplay"
+    },
+    {
+      "id": "yflix",
+      "name": "YFlix",
+      "description": "YFlix streaming",
+      "version": "1.1.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/yflix.js",
+      "enabled": true,
+      "limited": true,
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://yflix.to/assets/uploads/2f505f3de3c99889c1a72557f3e3714fc0c457b0.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "yflix"
+    },
+    {
+      "id": "videasy",
+      "name": "VIDEASY",
+      "description": "VideoEasy streaming with multiple server support and languages",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/videasy.js",
+      "enabled": false,
+      "limited": true,
+      "formats": [
+        "m3u8",
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://www.videasy.net/logo.png",
+      "contentLanguage": [
+        "en",
+        "de",
+        "it",
+        "fr",
+        "hi",
+        "es",
+        "pt"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "videasy"
+    },
+    {
+      "id": "mallumv",
+      "name": "MalluMV",
+      "description": "MalluMV direct links with support for Tamil, Telugu, Hindi, Malayalam, and Kannada movies",
+      "version": "1.0.1",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie"
+      ],
+      "filename": "upstream/yoru/providers/mallumv.js",
+      "enabled": true,
+      "formats": [
+        "mkv",
+        "mp4"
+      ],
+      "logo": "https://mallumv.life/favicon.ico",
+      "contentLanguage": [
+        "ta",
+        "te",
+        "hi",
+        "ml",
+        "kn"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "mallumv"
+    },
+    {
+      "id": "vidlink",
+      "name": "Vidlink",
+      "description": "Vidlink streaming with encrypted TMDB ID support for movies and TV shows",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/vidlink.js",
+      "enabled": true,
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://vidlink.pro/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "vidlink"
+    },
+    {
+      "id": "vidnest",
+      "name": "Vidnest",
+      "description": "Vidnest streaming with encrypted AES-GCM sources",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/vidnest.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://vidnest.fun/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "vidnest"
+    },
+    {
+      "id": "vidnest-anime",
+      "name": "VidnestAnime",
+      "description": "Vidnest anime streaming with TMDB→AniList mapping and 5 servers (hindi, satoru, miko, pahe, anya)",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/vidnest-anime.js",
+      "enabled": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://vidnest.fun/favicon.ico",
+      "contentLanguage": [
+        "en",
+        "hi",
+        "ja"
+      ],
+      "limited": true,
+      "notes": "Automatically maps TMDB IDs to AniList. Supports sub/dub.",
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "vidnest-anime"
+    },
+    {
+      "id": "cinevibe",
+      "name": "Cinevibe",
+      "description": "Cinevibe (Movies)",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie"
+      ],
+      "filename": "upstream/yoru/providers/cinevibe.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=cinevibe.online&sz=128",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "cinevibe"
+    },
+    {
+      "id": "cinemacity",
+      "name": "CinemaCity",
+      "description": "CinemaCity (Multi-Language)",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/cinemacity.js",
+      "enabled": true,
+      "formats": [
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=cinema-city.pl&sz=128",
+      "contentLanguage": [
+        "en",
+        "hi",
+        "ta",
+        "te",
+        "id",
+        "pl",
+        "ar"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "cinemacity"
+    },
+    {
+      "id": "castle",
+      "name": "Castle",
+      "description": "Multi Lang provider",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/castle.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://static.hbayy.com/simple-blog-13/prod/_nuxt/big-logo.DESZ4mBj.png",
+      "contentLanguage": [
+        "en",
+        "hi",
+        "ta",
+        "te",
+        "ml",
+        "kn"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "castle"
+    },
+    {
+      "id": "showbox",
+      "name": "ShowBox",
+      "description": "ShowBox streaming with multiple quality options and versions",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/showbox.js",
+      "enabled": true,
+      "hasSettings": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://raw.githubusercontent.com/tapframe/nuvio-providers/main/Assets/Logo-2.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "showbox"
+    },
+    {
+      "id": "hdhub4u",
+      "name": "HDHub4u",
+      "description": "Direct links from HDHub4u with high-speed download support",
+      "version": "1.1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/hdhub4u.js",
+      "enabled": true,
+      "formats": [
+        "mkv",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=new6.hdhub4u.fo&sz=128",
+      "contentLanguage": [
+        "en",
+        "hin"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "hdhub4u"
+    },
+    {
+      "id": "allmovieland",
+      "name": "AllMovieLand",
+      "description": "AllMovieLand streaming provider with multi-language support",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/allmovieland.js",
+      "enabled": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=allmovieland.one&sz=128",
+      "contentLanguage": [
+        "en",
+        "hi",
+        "ta",
+        "te"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "allmovieland"
+    },
+    {
+      "id": "dooflix",
+      "name": "DooFlix",
+      "description": "Fast streaming provider with direct TMDB integration",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/dooflix.js",
+      "enabled": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=dooflix.org&sz=128",
+      "contentLanguage": [
+        "en",
+        "hi"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "dooflix"
+    },
+    {
+      "id": "movieblast",
+      "name": "MovieBlast",
+      "description": "Direct links via MovieBlast API with multi-language support",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/movieblast.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://raw.githubusercontent.com/phisher98/TVVVV/refs/heads/main/Icons/movieblast.png",
+      "contentLanguage": [
+        "te",
+        "hi",
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "movieblast"
+    },
+    {
+      "id": "mycima",
+      "name": "MyCima",
+      "description": "Arabic streaming provider with movies, series and anime",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/mycima.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=wecima.show&sz=128",
+      "contentLanguage": [
+        "ar"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "mycima"
+    },
+    {
+      "id": "moviesdrive",
+      "name": "MoviesDrive",
+      "description": "MoviesDrive streaming with HubCloud and Google Drive extraction",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/moviesdrive.js",
+      "enabled": true,
+      "formats": [
+        "mkv",
+        "mp4"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=moviesdrives.my&sz=128",
+      "contentLanguage": [
+        "en",
+        "hin"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "moviesdrive"
+    },
+    {
+      "id": "hianime",
+      "name": "HiAnime",
+      "description": "HiAnime multi-server anime streaming with real-time mapping and subtitles",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/hianime.js",
+      "enabled": true,
+      "hasSettings": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://www.google.com/s2/favicons?domain=hianime.to&sz=128",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "hianime"
+    },
+    {
+      "id": "kurage",
+      "name": "Kurage",
+      "description": "Kurage.live anime streaming with tRPC API and multi-server proxy support",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/kurage.js",
+      "enabled": true,
+      "formats": [
+        "mp4"
+      ],
+      "logo": "https://kurage.live/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "kurage"
+    },
+    {
+      "id": "anizone",
+      "name": "AniZone",
+      "description": "AniZone high-quality anime streaming with multi-audio and soft subtitles",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/yoru/providers/anizone.js",
+      "enabled": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://anizone.to/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "yoruix/nuvio-providers",
+      "upstreamId": "anizone"
+    },
+    {
+      "id": "tapframe-vixsrc",
+      "name": "Vixsrc",
+      "description": "Vixsrc M3U8 streaming with auto quality selection",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/vixsrc.js",
+      "enabled": true,
+      "logo": "https://vixsrc.to/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "vixsrc"
+    },
+    {
+      "id": "vidsrc",
+      "name": "VidSrc",
+      "description": "VidSrc M3U8 streaming with multiple server support",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/vidsrc.js",
+      "enabled": true,
+      "logo": "https://vsembed.ru/template/vidsrc-ico.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "vidsrc"
+    },
+    {
+      "id": "tapframe-dooflix",
+      "name": "DooFlix",
+      "description": "Fast streaming provider with direct TMDB integration",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/dooflix.js",
+      "enabled": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://dooflix.org/favicon.ico",
+      "contentLanguage": [
+        "en",
+        "hi"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "dooflix"
+    },
+    {
+      "id": "tapframe-netmirror",
+      "name": "NetMirror",
+      "description": "Streaming links from netmirror. Automatically disabled on iOS due to compatibility issues.",
+      "version": "1.0.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/netmirror.js",
+      "enabled": true,
+      "logo": "https://net22.cc/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "disabledPlatforms": [
+        "ios"
+      ],
+      "supportsExternalPlayer": false,
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "netmirror"
+    },
+    {
+      "id": "tapframe-streamflix",
+      "name": "StreamFlix",
+      "description": "Direct links via StreamFlix API",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/streamflix.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://streamflix.app/assets/images/logo-text-148x72.png",
+      "contentLanguage": [
+        "en",
+        "hin"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "streamflix"
+    },
+    {
+      "id": "tapframe-hdhub4u",
+      "name": "HDHub4u",
+      "description": "Direct links from HDHub4u with high-speed download support",
+      "version": "1.1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/hdhub4u.js",
+      "enabled": true,
+      "formats": [
+        "mkv",
+        "mp4"
+      ],
+      "logo": "https://new5.hdhub4u.fo/favicon.ico",
+      "contentLanguage": [
+        "en",
+        "hin"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "hdhub4u"
+    },
+    {
+      "id": "tapframe-4khdhub",
+      "name": "4KHDHub",
+      "description": "4KHDHub direct links",
+      "version": "1.0.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/4khdhub.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://4khdhub.fans/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "4khdhub"
+    },
+    {
+      "id": "tapframe-uhdmovies",
+      "name": "UHDMovies",
+      "description": "UHD Movies streaming with multiple resolution",
+      "version": "1.1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/uhdmovies.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://uhdmovies.rip/wp-content/uploads/2021/03/cropped-output-onlinepngtools-1-32x32.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "uhdmovies"
+    },
+    {
+      "id": "animekai",
+      "name": "AnimeKai",
+      "description": "AnimeKai TV episodes via AnimeKai servers",
+      "version": "1.1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/animekai.js",
+      "enabled": true,
+      "limited": true,
+      "logo": "https://animekai.to/assets/uploads/37585a39fe8c8d8fafaa2c7bfbf5374ecac859ea6a0288a6da2c61f5.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "animekai"
+    },
+    {
+      "id": "tapframe-moviesmod",
+      "name": "MoviesMod",
+      "description": "Movie and TV show streams from MoviesMod with multiple quality options",
+      "version": "1.0.1",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/moviesmod.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://moviesmod.plus/wp-content/uploads/2022/10/moviesmod.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "moviesmod"
+    },
+    {
+      "id": "hdrezka",
+      "name": "HDRezka",
+      "description": "HDRezka streaming platform with multi-language support",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/hdrezka.js",
+      "enabled": true,
+      "logo": "https://hdrezka.ag/templates/hdrezka/images/favicon.ico",
+      "contentLanguage": [
+        "ru",
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "hdrezka"
+    },
+    {
+      "id": "tapframe-dahmermovies",
+      "name": "DahmerMovies",
+      "description": "Dahmer Movies streaming service. Can be slow at times to fetch and stream. Only use if needed.",
+      "version": "1.0.1",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/dahmermovies.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://image.similarpng.com/file/similarpng/very-thumbnail/2021/05/Letter-D-logo-design-template-with-geometric-shape-style-on-transparent-background-PNG.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "dahmermovies"
+    },
+    {
+      "id": "watch32",
+      "name": "Watch32",
+      "description": "Lightweight M3U8 Links",
+      "version": "1.1.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/watch32.js",
+      "enabled": false,
+      "logo": "https://img.watch32.sx/xxrz/400x400/100/a9/5e/a95e15a880a9df3c045f6a5224daf576/a95e15a880a9df3c045f6a5224daf576.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "watch32"
+    },
+    {
+      "id": "tapframe-moviebox",
+      "name": "MovieBox",
+      "description": "MovieBox streaming with multiple language support",
+      "version": "1.0.1",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/moviebox.js",
+      "enabled": false,
+      "formats": [
+        "mp4"
+      ],
+      "logo": "https://h5-static.aoneroom.com/oneroomStatic/public/_nuxt/web-logo.apJjVir2.svg",
+      "contentLanguage": [
+        "en",
+        "hin",
+        "tam",
+        "tel"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "moviebox"
+    },
+    {
+      "id": "tapframe-dvdplay",
+      "name": "DVDPlay",
+      "description": "DVDPlay direct download links with HubCloud extraction",
+      "version": "1.0.1",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/dvdplay.js",
+      "enabled": true,
+      "formats": [
+        "mkv"
+      ],
+      "logo": "https://dvdplay.rodeo/dvdplay-icon.png",
+      "contentLanguage": [
+        "mal",
+        "tam",
+        "hin"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "dvdplay"
+    },
+    {
+      "id": "tapframe-yflix",
+      "name": "YFlix",
+      "description": "YFlix streaming",
+      "version": "1.1.2",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/yflix.js",
+      "enabled": true,
+      "limited": true,
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://yflix.to/assets/uploads/2f505f3de3c99889c1a72557f3e3714fc0c457b0.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "yflix"
+    },
+    {
+      "id": "tapframe-videasy",
+      "name": "VIDEASY",
+      "description": "VideoEasy streaming with multiple server support and languages",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/videasy.js",
+      "enabled": true,
+      "limited": true,
+      "formats": [
+        "m3u8",
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://www.videasy.net/logo.png",
+      "contentLanguage": [
+        "en",
+        "de",
+        "it",
+        "fr",
+        "hi",
+        "es",
+        "pt"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "videasy"
+    },
+    {
+      "id": "tapframe-mallumv",
+      "name": "MalluMV",
+      "description": "MalluMV direct links with support for Tamil, Telugu, Hindi, Malayalam, and Kannada movies",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie"
+      ],
+      "filename": "upstream/tapframe/providers/mallumv.js",
+      "enabled": true,
+      "formats": [
+        "mkv",
+        "mp4"
+      ],
+      "logo": "https://mallumv.fit/favicon.ico",
+      "contentLanguage": [
+        "ta",
+        "te",
+        "hi",
+        "ml",
+        "kn"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "mallumv"
+    },
+    {
+      "id": "tapframe-vidlink",
+      "name": "Vidlink",
+      "description": "Vidlink streaming with encrypted TMDB ID support for movies and TV shows",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/vidlink.js",
+      "enabled": true,
+      "formats": [
+        "m3u8",
+        "mp4"
+      ],
+      "logo": "https://vidlink.pro/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "vidlink"
+    },
+    {
+      "id": "tapframe-vidnest",
+      "name": "Vidnest",
+      "description": "Vidnest streaming with encrypted AES-GCM sources",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/vidnest.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://vidnest.fun/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "vidnest"
+    },
+    {
+      "id": "tapframe-vidnest-anime",
+      "name": "VidnestAnime",
+      "description": "Vidnest anime streaming with TMDB→AniList mapping and 5 servers (hindi, satoru, miko, pahe, anya)",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/vidnest-anime.js",
+      "enabled": true,
+      "formats": [
+        "m3u8"
+      ],
+      "logo": "https://vidnest.fun/favicon.ico",
+      "contentLanguage": [
+        "en",
+        "hi",
+        "ja"
+      ],
+      "limited": true,
+      "notes": "Automatically maps TMDB IDs to AniList. Supports sub/dub.",
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "vidnest-anime"
+    },
+    {
+      "id": "vidrock",
+      "name": "Vidrock",
+      "description": "Vidrock streaming with AES-CBC encrypted sources",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/vidrock.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://vidrock.net/Rock.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "vidrock"
+    },
+    {
+      "id": "mapple",
+      "name": "Mapple",
+      "description": "Mapple streaming with multiple sources (Mapple 4K, Sakura, Pinecone, Oak, Willow)",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/mapple.js",
+      "enabled": false,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://mapple.uk/favicon.ico",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "mapple"
+    },
+    {
+      "id": "tapframe-cinevibe",
+      "name": "Cinevibe",
+      "description": "Cinevibe (Movies)",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie"
+      ],
+      "filename": "upstream/tapframe/providers/cinevibe.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://cinevibe.asia/assets/favicon-32x32.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "cinevibe"
+    },
+    {
+      "id": "tapframe-castle",
+      "name": "Castle",
+      "description": "Multi Lang provider",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/castle.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "logo": "https://static.hbayy.com/simple-blog-13/prod/_nuxt/big-logo.DESZ4mBj.png",
+      "contentLanguage": [
+        "en",
+        "hi",
+        "ta",
+        "te",
+        "ml",
+        "kn"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "castle"
+    },
+    {
+      "id": "tapframe-showbox",
+      "name": "ShowBox",
+      "description": "ShowBox streaming with multiple quality options and versions",
+      "version": "1.0.0",
+      "author": "Nuvio Team",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "upstream/tapframe/providers/showbox.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "mkv"
+      ],
+      "logo": "https://raw.githubusercontent.com/tapframe/nuvio-providers/main/Assets/Logo-2.png",
+      "contentLanguage": [
+        "en"
+      ],
+      "upstreamRepository": "iberiaimm/nuvio-providers",
+      "upstreamId": "showbox"
     }
   ]
 }
