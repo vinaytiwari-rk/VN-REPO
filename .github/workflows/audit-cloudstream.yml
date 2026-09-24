@@ -1,5 +1,13 @@
 name: Audit CloudStream migration sources
 on:
+  push:
+    paths:
+      - 'migration/**'
+      - '.github/workflows/audit-cloudstream.yml'
+  pull_request:
+    paths:
+      - 'migration/**'
+      - '.github/workflows/audit-cloudstream.yml'
   workflow_dispatch:
   schedule:
     - cron: '17 3 * * 1'
@@ -13,6 +21,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - run: node --check migration/audit-sources.js
       - run: node migration/audit-sources.js
       - uses: actions/upload-artifact@v4
         with:
