@@ -19,7 +19,7 @@ async function check() {
     const value = String(url);
     const body = value.includes("themoviedb.org") ? sampleHtml :
       value.includes("dailymotion.com") ? { list: [{id:"x123",title:"Example Movie",status:"published"}] } :
-      value.includes("search/videos") ? {data:[{id:"peer1",name:"Example Movie"}]} :
+      value.includes("search/videos") ? {data:[{id:"peer1",name:"Example Movie"},{id:"unrelated",name:"Completely Different Video"}]} :
       value.includes("/videos/peer1") ? {streamingPlaylists:[{playlistUrl:"https://example.org/film.m3u8"}],files:[]} :
       value.includes("commons.wikimedia.org") ? {query:{pages:{"1":{title:"File:Example Movie.mp4",imageinfo:[{url:"https://upload.wikimedia.org/example.mp4",mime:"video/mp4",extmetadata:{LicenseShortName:{value:"CC BY 4.0"}}}]}}}} :
       value.includes("archive.org/metadata/") ? {metadata:{licenseurl:"https://creativecommons.org/licenses/by/4.0/"},files:[{name:"film.mp4"}]} :
@@ -53,6 +53,7 @@ async function check() {
     assert(Array.isArray(streams),p.id+" must return array");
     for(const s of streams)assert(s.url && String(s.url).startsWith("https://") && !s.externalUrl,p.id+" must return direct HTTPS media candidates");
     assert(streams.length>0,p.id+" returned no mocked media");
+    if(p.id==="vn-peertube")assert(streams.every(s=>!s.title.includes("Completely Different Video")),"PeerTube must reject unrelated search hits");
     console.log("PASS Nuvio",p.id,streams.length,"mock candidates");
   }
   const alias=JSON.parse(fs.readFileSync("nuvio-manifest.json","utf8"));
