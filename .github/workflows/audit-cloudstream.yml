@@ -1,0 +1,20 @@
+name: Audit CloudStream migration sources
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node migration/audit-sources.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cloudstream-source-audit
+          path: migration/reports/source-audit.json
