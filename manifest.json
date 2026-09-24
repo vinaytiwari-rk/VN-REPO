@@ -1,14 +1,29 @@
-[
-  {
-    "id": "vn-universal-stream",
-    "name": "VN Universal Streams",
-    "description": "High quality fast multi-server movie and series streams for Nuvio.",
-    "version": "2.0.0",
-    "author": "VN",
-    "supportedTypes": ["movie", "tv", "series"],
-    "filename": "providers/vn_stream.js",
-    "enabled": true,
-    "contentLanguage": ["en", "hi"],
-    "supportsExternalPlayer": true
-  }
-]
+{
+  "name": "VN Repository",
+  "version": "1.0.0",
+  "description": "High Quality Movie & TV Series Providers for Nuvio",
+  "scrapers": [
+    {
+      "id": "vn-universal-stream",
+      "name": "VN Universal Streams",
+      "description": "High quality fast multi-server movie and series streams for Nuvio.",
+      "version": "2.0.0",
+      "author": "VN",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "providers/vn_stream.js",
+      "enabled": true,
+      "formats": [
+        "mp4",
+        "m3u8"
+      ],
+      "contentLanguage": [
+        "en",
+        "hi"
+      ],
+      "supportsExternalPlayer": true
+    }
+  ]
+}
