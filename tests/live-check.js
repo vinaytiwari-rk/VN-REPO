@@ -1,7 +1,10 @@
 // Live network smoke checks: direct-media HTTP and MIME only, not device playback.
 const fs=require("node:fs");
 const vm=require("node:vm");
-const manifest=JSON.parse(fs.readFileSync("manifest.json","utf8"));
+const manifestPath=process.env.MANIFEST_PATH||"manifest.json";
+const reportPath=process.env.REPORT_PATH||"migration/reports/live-smoke.json";
+const manifest=JSON.parse(fs.readFileSync(manifestPath,"utf8"));
+const prefix=manifestPath.includes("/")?manifestPath.slice(0,manifestPath.lastIndexOf("/")+1):"";
 const ids=(process.env.TMDB_TEST_IDS||"550").split(",").map(x=>x.trim()).filter(Boolean);
 const mediaType=process.env.MEDIA_TYPE||"movie";
 const season=Number(process.env.SEASON||1);
@@ -35,10 +38,10 @@ async function probe(url){
  }catch(e){return {ok:false,reason:String(e.message||e)};}
 }
 (async()=>{
- const report={generatedAt:new Date().toISOString(),scope:"HTTP media smoke only; not Nuvio device playback",tests:[]};
+ const report={generatedAt:new Date().toISOString(),manifest:manifestPath,scope:"HTTP media smoke only; not Nuvio device playback",tests:[]};
  for(const p of manifest.scrapers.filter(x=>x.enabled)){
   const ctx={module:{exports:{}},fetch:checkedFetch,console,Promise,encodeURIComponent,URL,setTimeout,clearTimeout};
-  vm.runInNewContext(fs.readFileSync(p.filename,"utf8"),ctx,{filename:p.filename});
+  vm.runInNewContext(fs.readFileSync(prefix+p.filename,"utf8"),ctx,{filename:prefix+p.filename});
   for(const id of ids){
    let streams=[],error=null;
    try{streams=await Promise.race([ctx.module.exports.getStreams(id,mediaType,season,episode),new Promise((_,reject)=>setTimeout(()=>reject(Error("provider_timeout")),timeout*4))]);}
@@ -51,7 +54,7 @@ async function probe(url){
   }
  }
  fs.mkdirSync("migration/reports",{recursive:true});
- fs.writeFileSync("migration/reports/live-smoke.json",JSON.stringify(report,null,2)+"\n");
+ fs.writeFileSync(reportPath,JSON.stringify(report,null,2)+"\n");
  for(const t of report.tests)console.log(t.provider,t.tmdbId,"returned="+t.returned,"media_http_ok="+t.checked.filter(x=>x.probe.ok).length,t.error||"");
  if(!report.tests.some(t=>t.checked.some(x=>x.probe.ok)))process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1;});
