@@ -55,6 +55,13 @@ async function check() {
     assert(streams.length>0,p.id+" returned no mocked media");
     console.log("PASS Nuvio",p.id,streams.length,"mock candidates");
   }
+  const alias=JSON.parse(fs.readFileSync("nuvio-manifest.json","utf8"));
+  assert.deepStrictEqual(alias.map(p=>p.id),nuvio.scrapers.map(p=>p.id),"Legacy Nuvio alias provider list must match canonical manifest");
+  for(let i=0;i<alias.length;i++){
+    assert.strictEqual(alias[i].enabled,nuvio.scrapers[i].enabled,"Alias enabled flag mismatch: "+alias[i].id);
+    assert.strictEqual(alias[i].filename,"nuvio/"+nuvio.scrapers[i].filename,"Alias filename mismatch: "+alias[i].id);
+    assert(fs.existsSync(alias[i].filename),"Alias provider file missing: "+alias[i].filename);
+  }
   console.log("PASS manifest + all provider JavaScript files; mocked provider contracts (not live playback)");
 }
 check().catch(e=>{console.error(e);process.exit(1)});
