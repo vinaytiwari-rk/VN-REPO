@@ -5,9 +5,13 @@ const assert = require("assert");
 const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
 assert(manifest.name && manifest.version && Array.isArray(manifest.scrapers));
 const ids = new Set();
+const providerNames = new Set();
 for (const item of manifest.scrapers) {
   assert(item.id && !ids.has(item.id), "Duplicate/missing provider ID");
   ids.add(item.id);
+  const canonicalName=String(item.name||item.id).toLowerCase().replace(/[^a-z0-9]/g,"");
+  assert(!providerNames.has(canonicalName),"Duplicate provider display name: "+item.name);
+  providerNames.add(canonicalName);
   assert(fs.existsSync(item.filename), "Missing provider file: " + item.filename);
   if(item.upstreamRepository)assert(/^upstream\/(yoru|tapframe)\/providers\/[a-zA-Z0-9_.-]+\.js$/.test(item.filename),"Unexpected upstream path: "+item.filename);
   assert(Array.isArray(item.supportedTypes));

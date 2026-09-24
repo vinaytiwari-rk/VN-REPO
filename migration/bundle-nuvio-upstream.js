@@ -18,6 +18,9 @@ async function main(){
  const base=JSON.parse(fs.readFileSync("manifest.json","utf8"));
  const local=base.scrapers.filter(p=>!p.upstreamRepository);
  const seen=new Set(local.map(p=>p.id));
+ const canonicalName=p=>String(p.name||p.id).toLowerCase().replace(/[^a-z0-9]/g,"");
+ const seenNames=new Set(local.map(canonicalName));
+ let skippedDuplicates=0;
  const added=[],notices=[];
  for(const src of upstream){
   const raw="https://raw.githubusercontent.com/"+src.repo+"/"+src.branch+"/";
@@ -29,6 +32,9 @@ async function main(){
   let count=0;
   for(const p of entries){
    if(!safeFile(p.filename)||typeof p.id!=="string"||!/^[a-z0-9_-]+$/i.test(p.id))throw Error("Unsafe provider entry in "+src.repo);
+   const nameKey=canonicalName(p);
+   if(seenNames.has(nameKey)){skippedDuplicates++;continue;}
+   seenNames.add(nameKey);
    const code=await download(raw+p.filename);
    const file="upstream/"+src.key+"/"+p.filename;
    fs.writeFileSync(file,code);
@@ -41,12 +47,12 @@ async function main(){
   }
   notices.push(src.repo+" ("+count+" provider files, GPL-3.0): https://github.com/"+src.repo);
  }
- const manifest={...base,version:"4.0.0",description:"VN and bundled GPL-3.0 upstream Nuvio JavaScript providers. Upstream enabled does not guarantee playback.",scrapers:[...local,...added]};
+ const manifest={...base,version:"4.0.1",description:"VN and bundled GPL-3.0 upstream Nuvio JavaScript providers. Upstream enabled does not guarantee playback.",scrapers:[...local,...added]};
  const ids=manifest.scrapers.map(p=>p.id);
  if(ids.length!==new Set(ids).size)throw Error("Duplicate provider IDs");
  for(const p of manifest.scrapers)if(!fs.existsSync(p.filename))throw Error("Missing provider "+p.filename);
  fs.writeFileSync("manifest.json",JSON.stringify(manifest,null,2)+"\n");
  fs.writeFileSync("upstream/NOTICE.md","# Bundled upstream provider code\n\n"+notices.join("\n")+"\n\nEach upstream LICENSE is included in its directory. Provider code is third-party and is not independently playback-verified. Use only content you are authorized to access.\n");
- console.log("Bundled",added.length,"upstream entries;",manifest.scrapers.length,"total; unique IDs:",ids.length);
+ console.log("Bundled",added.length,"upstream entries;",manifest.scrapers.length,"total; skipped duplicate names:",skippedDuplicates);
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
