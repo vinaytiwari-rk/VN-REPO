@@ -9,6 +9,7 @@ for (const item of manifest.scrapers) {
   assert(item.id && !ids.has(item.id), "Duplicate/missing provider ID");
   ids.add(item.id);
   assert(fs.existsSync(item.filename), "Missing provider file: " + item.filename);
+  if(item.upstreamRepository)assert(/^upstream\/(yoru|tapframe)\/providers\/[a-zA-Z0-9_.-]+\.js$/.test(item.filename),"Unexpected upstream path: "+item.filename);
   assert(Array.isArray(item.supportedTypes));
   const code = fs.readFileSync(item.filename, "utf8");
   new vm.Script(code, { filename: item.filename });
@@ -26,7 +27,7 @@ async function check() {
       {response:{docs:[{identifier:"example-movie",title:"Example Movie"}]}};
     return Promise.resolve({ok:true,text:()=>Promise.resolve(String(body)),json:()=>Promise.resolve(body)});
   };
-  for (const p of manifest.scrapers.filter(p=>p.enabled)) {
+  for (const p of manifest.scrapers.filter(p=>p.enabled && !p.upstreamRepository)) {
     const ctx = {module:{exports:{}},fetch:mockFetch,console,Promise,encodeURIComponent};
     vm.runInNewContext(fs.readFileSync(p.filename,"utf8"),ctx,{filename:p.filename});
     assert.strictEqual(typeof ctx.module.exports.getStreams,"function",p.id);

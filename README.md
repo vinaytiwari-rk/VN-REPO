@@ -2,9 +2,9 @@
 
 ## Want a larger movie and TV provider selection?
 
-The VN manifest below currently has **three experimental public/open-video providers**. It is NOT a broad Hollywood/Bollywood/TV catalog, and GitHub CI success does not prove in-app playback.
+The VN manifest contains **three VN-maintained experimental public/open-video providers** plus, after the bundling workflow succeeds, locally bundled upstream provider scripts. It is NOT a broad Hollywood/Bollywood/TV catalog, and GitHub CI success does not prove in-app playback.
 
-For a substantially larger, independently maintained provider collection, install the **upstream community repository separately** in Nuvio's **Plugins** screen (do not paste it into Addons):
+For a substantially larger, independently maintained provider collection, the upstream community source is also available separately (but the automated VN bundle means a second installation is not required once the generated manifest has been committed):
 
 ```text
 https://raw.githubusercontent.com/yoruix/nuvio-providers/refs/heads/main/manifest.json
@@ -12,16 +12,16 @@ https://raw.githubusercontent.com/yoruix/nuvio-providers/refs/heads/main/manifes
 
 Source, installation guide, code and licensing: https://github.com/yoruix/nuvio-providers
 
-The community repository is maintained by its own authors. Its individual providers may break, require authentication, be unavailable in your region, or expose content without appropriate distribution rights. Choose providers and content for which you have authorized access. VN-REPO does not copy or bundle upstream GPL-3.0 provider code and does not claim to test or maintain that repository.
+The community repository is maintained by its own authors. Its individual providers may break, require authentication, be unavailable in your region, or expose content without appropriate distribution rights. Choose providers and content for which you have authorized access. VN-REPO bundles the upstream GPL-3.0 source files with their original LICENSE files and attribution under upstream/. Their live playback is not guaranteed.
 
 ## Additional upstream Nuvio repositories for Android Mobile
 
-These independently maintained Nuvio JavaScript plugin repositories can be installed **alongside** VN-REPO in Nuvio's Plugins screen. The app supports multiple repository manifests; VN-REPO does not redistribute third-party provider scripts or falsely label upstream-enabled providers as playback-tested.
+These independently maintained Nuvio JavaScript plugin repositories are **bundled automatically into the main VN manifest** by the GitHub Actions workflow. They may also be installed separately if the bundle is unavailable. The app supports multiple repository manifests; VN-REPO includes GPL-3.0 upstream provider scripts and their original licenses, without claiming upstream-enabled providers are playback-tested.
 
 - Yoru's Repo: `https://raw.githubusercontent.com/yoruix/nuvio-providers/refs/heads/main/manifest.json`
 - Tapframe's Repo: `https://raw.githubusercontent.com/iberiaimm/nuvio-providers/refs/heads/main/manifest.json`
 
-Add each manifest separately via **Settings > Content & Discovery > Plugins > Add Repository**, refresh, then enable the providers you trust. These are **Plugins**, not Stremio **Addons** or native CloudStream Kotlin repositories. Provider availability, licensing, and actual playback must be verified on your own Android build. The weekly `Discover upstream Nuvio provider repositories` workflow generates an inventory artifact showing the providers upstream currently lists and enables; it does not install them on your device.
+After the bundling workflow completes, install only the VN manifest via **Settings > Plugins > Add Repository**, refresh, then enable the providers you trust. These are **Plugins**, not Stremio **Addons** or native CloudStream Kotlin repositories. Provider availability, licensing, and actual playback must be verified on your own Android build. The weekly `Discover upstream Nuvio provider repositories` workflow generates an inventory artifact showing the providers upstream currently lists and enables; it does not install them on your device.
 
 ## VN experimental public-video repository
 
