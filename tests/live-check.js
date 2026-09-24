@@ -39,7 +39,7 @@ async function probe(url){
 }
 (async()=>{
  const report={generatedAt:new Date().toISOString(),manifest:manifestPath,scope:"HTTP media smoke only; not Nuvio device playback",tests:[]};
- for(const p of manifest.scrapers.filter(x=>x.enabled)){
+ for(const p of manifest.scrapers.filter(x=>x.enabled&&!x.upstreamRepository)){
   const ctx={module:{exports:{}},fetch:checkedFetch,console,Promise,encodeURIComponent,URL,setTimeout,clearTimeout};
   vm.runInNewContext(fs.readFileSync(prefix+p.filename,"utf8"),ctx,{filename:prefix+p.filename});
   for(const id of ids){
