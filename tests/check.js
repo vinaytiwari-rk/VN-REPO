@@ -21,6 +21,7 @@ async function check() {
       value.includes("dailymotion.com") ? { list: [{id:"x123",title:"Example Movie",status:"published"}] } :
       value.includes("search/videos") ? {data:[{id:"peer1",name:"Example Movie"}]} :
       value.includes("/videos/peer1") ? {streamingPlaylists:[{playlistUrl:"https://example.org/film.m3u8"}],files:[]} :
+      value.includes("commons.wikimedia.org") ? {query:{pages:{"1":{title:"File:Example Movie.mp4",imageinfo:[{url:"https://upload.wikimedia.org/example.mp4",mime:"video/mp4",extmetadata:{LicenseShortName:{value:"CC BY 4.0"}}}]}}}} :
       value.includes("archive.org/metadata/") ? {metadata:{licenseurl:"https://creativecommons.org/licenses/by/4.0/"},files:[{name:"film.mp4"}]} :
       {response:{docs:[{identifier:"example-movie",title:"Example Movie"}]}};
     return Promise.resolve({ok:true,text:()=>Promise.resolve(String(body)),json:()=>Promise.resolve(body)});
@@ -35,6 +36,6 @@ async function check() {
     assert(streams.length > 0,p.id+" mock fixture returned no streams");
     console.log("PASS",p.id,streams.length,"mock results");
   }
-  console.log("PASS manifest + all 9 JavaScript files; mocked provider contracts (not live playback)");
+  console.log("PASS manifest + all provider JavaScript files; mocked provider contracts (not live playback)");
 }
 check().catch(e=>{console.error(e);process.exit(1)});
