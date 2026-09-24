@@ -1,66 +1,14 @@
-{
-  "id": "vn-global-video",
-  "version": "2.8.0",
-  "name": "VN Global Video",
-  "description": "Global public and authorized video discovery addon with series episode support.",
-  "logo": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/assets/logo.png",
-  "resources": [
-    {
-      "name": "catalog",
-      "types": [
-        "movie",
-        "series"
-      ]
-    },
-    {
-      "name": "meta",
-      "types": [
-        "movie",
-        "series",
-        "tv"
-      ]
-    },
-    {
-      "name": "stream",
-      "types": [
-        "movie",
-        "series",
-        "tv"
-      ],
-      "idPrefixes": [
-        "tt",
-        "dm:",
-        "pt:"
-      ]
-    }
-  ],
-  "types": [
-    "movie",
-    "series",
-    "tv"
-  ],
-  "catalogs": [
-    {
-      "type": "movie",
-      "id": "vn-global",
-      "name": "VN Global Video",
-      "extra": [
-        {
-          "name": "search",
-          "isRequired": false
-        }
-      ]
-    },
-    {
-      "type": "series",
-      "id": "vn-global",
-      "name": "VN Global Video",
-      "extra": [
-        {
-          "name": "search",
-          "isRequired": false
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "vn-universal-stream",
+    "name": "VN Universal Streams",
+    "description": "High quality fast multi-server movie and series streams for Nuvio.",
+    "version": "2.0.0",
+    "author": "VN",
+    "supportedTypes": ["movie", "tv", "series"],
+    "filename": "providers/vn_stream.js",
+    "enabled": true,
+    "contentLanguage": ["en", "hi"],
+    "supportsExternalPlayer": true
+  }
+]
