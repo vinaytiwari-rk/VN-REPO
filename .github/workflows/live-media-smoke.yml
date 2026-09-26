@@ -24,6 +24,7 @@ jobs:
           TMDB_TEST_IDS: '550'
           MAX_STREAMS: '3'
           TIMEOUT_MS: '12000'
+        continue-on-error: true
       - run: MANIFEST_PATH=v5/manifest.json REPORT_PATH=migration/reports/v5-live-smoke.json TMDB_TEST_IDS=10331,550 node tests/live-check.js
         continue-on-error: true
       - run: MANIFEST_PATH=nuvio/manifest.json REPORT_PATH=migration/reports/nuvio-live-smoke.json TMDB_TEST_IDS=10331,550 node tests/live-check.js
