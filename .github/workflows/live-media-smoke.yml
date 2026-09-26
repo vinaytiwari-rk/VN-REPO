@@ -34,3 +34,5 @@ jobs:
           name: live-media-smoke-report
           path: migration/reports/
           if-no-files-found: warn
+
+# Current v5 and canonical Nuvio manifests are both smoke-tested.
