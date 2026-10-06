@@ -105,6 +105,26 @@
       "formats": [
         "mp4"
       ]
+    },
+    {
+      "id": "vn-okru-authorized",
+      "name": "VN OK.RU Authorized Video",
+      "description": "Direct HLS candidates from OK.RU public embed metadata. Disabled by default; use only for owned/explicitly authorized videos. External-player compatibility requires separate playback verification.",
+      "version": "0.1.0",
+      "filename": "providers/okru-authorized.js",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "enabled": false,
+      "contentLanguage": [
+        "en",
+        "ru"
+      ],
+      "formats": [
+        "m3u8"
+      ],
+      "supportsExternalPlayer": false
     }
   ]
 }
