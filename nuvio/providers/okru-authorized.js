@@ -54,7 +54,7 @@ function getStreams(videoId) {
     var meta = decodeMetadata(html);
     var hls = meta && (meta.hlsManifestUrl || meta.hlsMasterUrl || meta.ondemandHls);
     if (!hls) {
-      var m = String(html).match(/(?:hlsManifestUrl|hlsMasterUrl|ondemandHls)(?:&quot;|")\\s*:\\s*(?:&quot;|")(https?:[^"&<]+)(?:&quot;|")/i);
+      var m = String(html).match(/(?:hlsManifestUrl|hlsMasterUrl|ondemandHls)(?:&quot;|")\s*:\s*(?:&quot;|")(https?:[^"&<]+)(?:&quot;|")/i);
       if (m) hls = m[1]
         .replace(/\\u0026/g, "&")
         .replace(/\\\\u0026/g, "&")
@@ -63,7 +63,7 @@ function getStreams(videoId) {
     if (!hls || !/^https:\/\//i.test(hls)) return [];
     return [{
       name: "VN • OK.RU Authorized HLS",
-      title: String(meta.movie && meta.movie.title || ("OK.RU Video " + id)),
+      title: String(meta && meta.movie && meta.movie.title || ("OK.RU Video " + id)),
       url: hls,
       quality: "Auto",
       headers: { Referer: "https://ok.ru/", Origin: "https://ok.ru" }
