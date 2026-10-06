@@ -1,3 +1,4 @@
+// CI live-media smoke entrypoint; provider/manifest changes trigger this workflow.
 // Live network smoke checks: direct-media HTTP and MIME only, not device playback.
 const fs=require("node:fs");
 const vm=require("node:vm");
