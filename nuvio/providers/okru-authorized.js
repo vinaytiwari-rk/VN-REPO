@@ -52,8 +52,14 @@ function getStreams(videoId) {
     return r.text();
   }).then(function(html) {
     var meta = decodeMetadata(html);
-    if (!meta) return [];
-    var hls = meta.hlsManifestUrl || meta.hlsMasterUrl || meta.ondemandHls;
+    var hls = meta && (meta.hlsManifestUrl || meta.hlsMasterUrl || meta.ondemandHls);
+    if (!hls) {
+      var m = String(html).match(/(?:hlsManifestUrl|hlsMasterUrl|ondemandHls)(?:&quot;|")\\s*:\\s*(?:&quot;|")(https?:[^"&<]+)(?:&quot;|")/i);
+      if (m) hls = m[1]
+        .replace(/\\u0026/g, "&")
+        .replace(/\\\\u0026/g, "&")
+        .replace(/&amp;/g, "&");
+    }
     if (!hls || !/^https:\/\//i.test(hls)) return [];
     return [{
       name: "VN • OK.RU Authorized HLS",
