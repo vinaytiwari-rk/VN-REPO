@@ -36,8 +36,27 @@
       "directMediaVerified": false,
       "authorizationVerified": false,
       "notes": "The supplied VK profile URL could not be inspected by the current web probe."
+    },
+    {
+      "url": "https://b4watch.com/movies/the-inspection/",
+      "reachability": "verified",
+      "directMediaVerified": false,
+      "authorizationVerified": false,
+      "notes": "Page exposes VK and UPnShare iframe/player sources, not a direct media URL. Site explicitly says it links to external sources and does not host videos; this is not authorization to redistribute the underlying films."
+    },
+    {
+      "url": "https://lacajalgbt.site/movie/adolescencia-sexo-y-muerte-en-campamento-miasma/",
+      "reachability": "verified",
+      "directMediaVerified": false,
+      "authorizationVerified": false,
+      "notes": "Movie page exposes an OK.RU iframe. The public page itself does not expose a direct MP4/M3U8 media URL or an authorization grant."
     }
   ],
   "repoAction": "No source-specific scraper/provider was added. This is intentional: Stage 2 remains gated until direct media and authorization are both established.",
-  "implementationReady": false
+  "implementationReady": false,
+  "findings": [
+    "B4Watch is an index/link site: a sample movie page exposes VK and UPnShare embeds rather than a direct media URL.",
+    "LaCajaLGBT uses an OK.RU embed for a sample movie page; the embed page still does not establish a direct media URL suitable for Nuvio/external-player verification.",
+    "OK.RU public search results confirm the referenced channel contains long-form videos, but this does not prove redistribution rights or expose a verified direct media URL."
+  ]
 }
