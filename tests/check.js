@@ -5,8 +5,8 @@ const assert = require("assert");
 const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8"));
 assert(manifest.name && manifest.version && Array.isArray(manifest.scrapers));
 assert(Array.isArray(manifest.categories) && manifest.categories.length === 1, "Exactly one content category must be defined");
-assert.strictEqual(manifest.categories[0].id, "erotic-cinema", "Unexpected unified category ID");
-assert.strictEqual(manifest.categories[0].name, "Erotic Cinema", "Unexpected unified category name");
+assert.strictEqual(manifest.categories[0].id, "after-dark", "Unexpected unified category ID");
+assert.strictEqual(manifest.categories[0].name, "After Dark", "Unexpected unified category name");
 const v5=JSON.parse(fs.readFileSync("v5/manifest.json","utf8"));
 assert.strictEqual(v5.version,"5.0.0");
 assert.strictEqual(v5.scrapers.length,manifest.scrapers.length,"v5 manifest provider count differs");
@@ -54,8 +54,8 @@ async function check() {
   }
   const nuvio = JSON.parse(fs.readFileSync("nuvio/manifest.json","utf8"));
   assert(Array.isArray(nuvio.categories) && nuvio.categories.length === 1, "Nuvio must expose exactly one unified content category");
-  assert.strictEqual(nuvio.categories[0].id, "erotic-cinema", "Nuvio category ID mismatch");
-  assert.strictEqual(nuvio.categories[0].name, "Erotic Cinema", "Nuvio category name mismatch");
+  assert.strictEqual(nuvio.categories[0].id, "after-dark", "Nuvio category ID mismatch");
+  assert.strictEqual(nuvio.categories[0].name, "After Dark", "Nuvio category name mismatch");
   const nuvioIds = new Set();
   for (const p of nuvio.scrapers) {
     assert(p.id && !nuvioIds.has(p.id), "Duplicate Nuvio provider ID");
