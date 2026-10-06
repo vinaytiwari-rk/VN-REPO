@@ -124,7 +124,17 @@
       "formats": [
         "m3u8"
       ],
-      "supportsExternalPlayer": true
+      "supportsExternalPlayer": true,
+      "categories": [
+        "erotic-cinema"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "erotic-cinema",
+      "name": "Erotic Cinema",
+      "description": "Single unified category for softcore erotic cinema, including heterosexual and LGBTQ+ titles."
     }
   ]
 }
