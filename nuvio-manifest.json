@@ -100,5 +100,20 @@
     "formats": [
       "mp4"
     ]
+  },
+  {
+    "id": "vn-okru-authorized",
+    "name": "VN OK.RU Authorized Video",
+    "description": "Disabled authorized-only OK.RU HLS resolver.",
+    "version": "0.1.0",
+    "filename": "nuvio/providers/okru-authorized.js",
+    "enabled": false,
+    "formats": [
+      "m3u8"
+    ],
+    "supportedTypes": [
+      "movie",
+      "tv"
+    ]
   }
 ]
