@@ -57,6 +57,16 @@
   "findings": [
     "B4Watch is an index/link site: a sample movie page exposes VK and UPnShare embeds rather than a direct media URL.",
     "LaCajaLGBT uses an OK.RU embed for a sample movie page; the embed page still does not establish a direct media URL suitable for Nuvio/external-player verification.",
-    "OK.RU public search results confirm the referenced channel contains long-form videos, but this does not prove redistribution rights or expose a verified direct media URL."
-  ]
+    "OK.RU public search results confirm the referenced channel contains long-form videos, but this does not prove redistribution rights or expose a verified direct media URL.",
+    "Technical feasibility is confirmed for OK.RU at the platform level: public resolver research shows videoembed metadata can contain HLS master URLs and quality variants.",
+    "However, OK.RU CDN playback may require Referer/Origin headers; one documented resolver uses a proxy to forward those headers and rewrite HLS playlists. Therefore a raw CDN URL is not yet proven to satisfy the user's VLC/MX Player direct-play requirement.",
+    "This is a platform-level feasibility result, not authorization for the specific supplied movies/videos."
+  ],
+  "okruTechnicalFeasibility": {
+    "platformHlsExtraction": "possible",
+    "rawExternalPlayerCompatibility": "not_proven",
+    "proxyRequiredInKnownImplementation": true,
+    "exactUserVideoDirectUrl": "not_verified",
+    "authorization": "not_verified"
+  }
 }
