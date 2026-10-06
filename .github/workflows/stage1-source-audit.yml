@@ -9,6 +9,7 @@ on:
       - 'tests/okru-provider-live.js'
       - 'nuvio/providers/okru-authorized.js'
       - 'tests/okru-external-player-gate.js'
+      - 'tests/okru-vlc-gate.js'
       - '.github/workflows/stage1-source-audit.yml'
 jobs:
   audit:
@@ -20,8 +21,9 @@ jobs:
       - run: node tests/source-stage1.js
       - run: node tests/okru-stage1-hls.js
       - run: node tests/okru-provider-live.js
-      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg vlc
       - run: node tests/okru-external-player-gate.js
+      - run: node tests/okru-vlc-gate.js
       - uses: actions/upload-artifact@v4
         with:
           name: stage1-public-source-audit
