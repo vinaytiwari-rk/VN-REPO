@@ -5,6 +5,7 @@ on:
     paths:
       - 'tests/source-stage1.js'
       - 'migration/cloudstream-sources.json'
+      - 'tests/okru-stage1-hls.js'
       - '.github/workflows/stage1-source-audit.yml'
 jobs:
   audit:
@@ -14,7 +15,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: 22}
       - run: node tests/source-stage1.js
+      - run: node tests/okru-stage1-hls.js
       - uses: actions/upload-artifact@v4
         with:
           name: stage1-public-source-audit
-          path: migration/reports/stage1-public-sources.json
+          path: migration/reports/
