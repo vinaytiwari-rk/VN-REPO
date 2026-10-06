@@ -1029,15 +1029,15 @@
       ],
       "supportsExternalPlayer": false,
       "categories": [
-        "erotic-cinema"
+        "after-dark"
       ]
     }
   ],
   "categories": [
     {
-      "id": "erotic-cinema",
-      "name": "Erotic Cinema",
-      "description": "Single unified category for softcore erotic cinema, including heterosexual and LGBTQ+ titles."
+      "id": "after-dark",
+      "name": "After Dark",
+      "description": "Single unified category for softcore mature cinema, including heterosexual and LGBTQ+ titles."
     }
   ]
 }
