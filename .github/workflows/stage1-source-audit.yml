@@ -5,6 +5,7 @@ on:
     paths:
       - 'tests/source-stage1.js'
       - 'migration/cloudstream-sources.json'
+      - '.github/workflows/stage1-source-audit.yml'
 jobs:
   audit:
     runs-on: ubuntu-latest
