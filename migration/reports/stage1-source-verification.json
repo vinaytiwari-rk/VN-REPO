@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-10-06",
+  "stage": "Stage 1",
+  "status": "blocked",
+  "purpose": "Source feasibility gate before any Nuvio provider implementation",
+  "acceptanceCriteria": [
+    "A real direct media URL must be demonstrated (MP4, M3U8, or equivalent playable media).",
+    "The content/source must have a verified authorization basis for the intended use.",
+    "The same direct URL must be suitable for Nuvio internal playback and external players such as VLC/MX Player."
+  ],
+  "sources": [
+    {
+      "url": "https://b4watch.com/",
+      "reachability": "reachable",
+      "directMediaVerified": false,
+      "authorizationVerified": false,
+      "notes": "Public catalogue page reachable; page states it links to external sources, but this does not establish redistribution authorization for individual titles."
+    },
+    {
+      "url": "https://lacajalgbt.site/",
+      "reachability": "reachable",
+      "directMediaVerified": false,
+      "authorizationVerified": false,
+      "notes": "Public catalogue page reachable; no authorization basis for individual titles established."
+    },
+    {
+      "url": "https://ok.ru/video/16386530740872",
+      "reachability": "not_verified_in_current_web_probe",
+      "directMediaVerified": false,
+      "authorizationVerified": false,
+      "notes": "The supplied video URL could not be inspected by the current web probe."
+    },
+    {
+      "url": "https://vk.ru/gogogox",
+      "reachability": "not_verified_in_current_web_probe",
+      "directMediaVerified": false,
+      "authorizationVerified": false,
+      "notes": "The supplied VK profile URL could not be inspected by the current web probe."
+    }
+  ],
+  "repoAction": "No source-specific scraper/provider was added. This is intentional: Stage 2 remains gated until direct media and authorization are both established.",
+  "implementationReady": false
+}
