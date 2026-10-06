@@ -8,6 +8,7 @@ on:
       - 'tests/okru-stage1-hls.js'
       - 'tests/okru-provider-live.js'
       - 'nuvio/providers/okru-authorized.js'
+      - 'tests/okru-external-player-gate.js'
       - '.github/workflows/stage1-source-audit.yml'
 jobs:
   audit:
@@ -19,6 +20,7 @@ jobs:
       - run: node tests/source-stage1.js
       - run: node tests/okru-stage1-hls.js
       - run: node tests/okru-provider-live.js
+      - run: node tests/okru-external-player-gate.js
       - uses: actions/upload-artifact@v4
         with:
           name: stage1-public-source-audit
