@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - 'manifest.json'
+      - 'v5/manifest.json'
+      - 'nuvio-manifest.json'
       - 'providers/**'
       - 'nuvio/**'
       - 'tests/**'
