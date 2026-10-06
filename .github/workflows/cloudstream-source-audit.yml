@@ -1,0 +1,20 @@
+name: VN CloudStream Source Inventory Audit
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tests/cloudstream-source-stage1.js'
+      - 'migration/cloudstream-sources.json'
+      - '.github/workflows/cloudstream-source-audit.yml'
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - run: node tests/cloudstream-source-stage1.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cloudstream-source-stage1
+          path: migration/reports/cloudstream-source-stage1.json
