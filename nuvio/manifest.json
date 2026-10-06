@@ -109,7 +109,7 @@
     {
       "id": "vn-okru-authorized",
       "name": "VN OK.RU Authorized Video",
-      "description": "Direct HLS candidates from OK.RU public embed metadata. Disabled by default; use only for owned/explicitly authorized videos. External-player compatibility requires separate playback verification.",
+      "description": "Direct HLS candidates from OK.RU public embed metadata. Disabled by default; use only for owned/explicitly authorized videos. HLS has passed HTTP, FFmpeg, and headless VLC engine gates; Android device playback is not yet verified.",
       "version": "0.1.0",
       "filename": "providers/okru-authorized.js",
       "supportedTypes": [
@@ -124,7 +124,7 @@
       "formats": [
         "m3u8"
       ],
-      "supportsExternalPlayer": false
+      "supportsExternalPlayer": true
     }
   ]
 }
