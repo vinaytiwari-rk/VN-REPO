@@ -193,6 +193,29 @@
       ]
     },
     {
+      "id": "vn-okru-authorized",
+      "name": "VN OK.RU Authorized Video",
+      "description": "Direct HLS candidates from OK.RU public embed metadata. Disabled by default; use only for owned/explicitly authorized videos. HLS has passed HTTP, FFmpeg, and headless VLC engine gates; Android device playback is not yet verified.",
+      "version": "0.1.0",
+      "supportedTypes": [
+        "movie",
+        "tv"
+      ],
+      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/nuvio/providers/okru-authorized.js",
+      "enabled": false,
+      "formats": [
+        "m3u8"
+      ],
+      "contentLanguage": [
+        "en",
+        "ru"
+      ],
+      "supportsExternalPlayer": false,
+      "categories": [
+        "erotic-cinema"
+      ]
+    },
+    {
       "id": "4khdhub",
       "name": "4KHDHub",
       "description": "4KHDHub direct links",
@@ -324,7 +347,7 @@
       "disabledPlatforms": [
         "ios"
       ],
-      "supportsExternalPlayer": true,
+      "supportsExternalPlayer": false,
       "upstreamRepository": "yoruix/nuvio-providers",
       "upstreamId": "netmirror"
     },
@@ -1008,29 +1031,6 @@
       ],
       "upstreamRepository": "iberiaimm/nuvio-providers",
       "upstreamId": "mapple"
-    },
-    {
-      "id": "vn-okru-authorized",
-      "name": "VN OK.RU Authorized Video",
-      "description": "Direct HLS candidates from OK.RU public embed metadata. Disabled by default; use only for owned/explicitly authorized videos. HLS has passed HTTP, FFmpeg, and headless VLC engine gates; Android device playback is not yet verified.",
-      "version": "0.1.0",
-      "supportedTypes": [
-        "movie",
-        "tv"
-      ],
-      "filename": "https://raw.githubusercontent.com/vinaytiwari-rk/VN-REPO/main/nuvio/providers/okru-authorized.js",
-      "enabled": false,
-      "formats": [
-        "m3u8"
-      ],
-      "contentLanguage": [
-        "en",
-        "ru"
-      ],
-      "supportsExternalPlayer": false,
-      "categories": [
-        "erotic-cinema"
-      ]
     }
   ],
   "categories": [
